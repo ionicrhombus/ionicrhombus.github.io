@@ -35,7 +35,7 @@ header.bottom {
     /* Maintains the aspect ratio */
 }
 
-/* HIDE MOBILE MENU BY DEFAULT */
+/* HIDE MOBILE MENU BY DEFAULT (The fix for desktop overlap) */
 .mobile-menu {
     display: none;
 }
@@ -529,9 +529,10 @@ section.services .card-grid .card:hover p {
         padding: 1rem 0;
     }
 
-    /* MOBILE MENU STYLES */
+    /* MOBILE MENU STYLES - FIX APPLIED HERE */
     .mobile-menu {
-        display: flex; /* Override the desktop hide for mobile view */
+        /* IMPORTANT: Must be flex for the menu to structure correctly and be visible */
+        display: flex; 
         position: fixed;
         top: 0;
         left: 0;
