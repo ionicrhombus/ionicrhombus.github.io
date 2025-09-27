@@ -30,12 +30,10 @@ header.bottom {
 
 .large-image {
     width: 400px;
-    /* Adjust the width as needed */
     height: 400px;
-    /* Maintains the aspect ratio */
 }
 
-/* HIDE MOBILE MENU BY DEFAULT (The fix for desktop overlap) */
+/* HIDE MOBILE MENU BY DEFAULT ON DESKTOP/LARGE SCREENS */
 .mobile-menu {
     display: none;
 }
@@ -68,17 +66,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center the cards horizontally within the container */
     justify-content: center;
-    /* Center the cards vertically within the container */
     gap: 20px;
     width: 80%;
-    /* Adjust as needed */
     margin: 0 auto;
-    /* Center the container horizontally */
 }
 
-/* Style the .card elements */
 .card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -87,15 +80,11 @@ body {
     padding: 3%;
     text-align: center;
     width: 100%;
-    /* Ensure cards take the full width of the container */
     box-sizing: border-box;
-    /* Include padding and border in the element's total width and height */
 }
 
-/* Style the links inside the research cards */
 .card-link {
     color: var(--primary);
-    /* Use your primary color */
     text-decoration: underline;
     font-weight: 600;
     transition: color 0.2s ease;
@@ -221,11 +210,8 @@ section.services .card-grid {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     max-width: 100%;
-    /* Ensure grid takes full width of its container */
     margin: 0 auto;
-    /* Center grid horizontally */
     padding-top: 2rem;
-    /* Adjust as needed */
 }
 
 section.services .card-grid .card {
@@ -234,9 +220,7 @@ section.services .card-grid .card {
     text-align: center;
     transition: all 0.2s ease;
     width: 100%;
-    /* Make the card take full width of its grid cell */
     box-sizing: border-box;
-    /* Include padding in the width */
 }
 
 section.services .card-grid .card img {
@@ -331,12 +315,11 @@ section.services .card-grid .card:hover p {
     color: var(--secondary);
 }
 
-/* Tertiary Buttons (Faculty & LinkedIn) - UPDATED TO MATCH SECONDARY */
+/* Tertiary Buttons (Faculty & LinkedIn) - Matches secondary/CV button style */
 .btn-tertiary {
     background: transparent;
     color: var(--white);
-    border: 2px solid var(--white); /* White border to stand out on dark background */
-    
+    border: 2px solid var(--white);
     padding: 0.6rem 2rem;
     font-size: 1rem;
     font-weight: 600;
@@ -351,53 +334,46 @@ section.services .card-grid .card:hover p {
 
 .btn-tertiary:hover {
     background: var(--white);
-    color: var(--bgDark); /* Dark text on white hover */
+    color: var(--bgDark);
 }
 
 .hero .right .btn-secondary {
     margin-left: 1rem;
 }
 
-/* NEW INTERMEDIATE MEDIA QUERY TO PREVENT OVERLAP */
+/* INTERMEDIATE MEDIA QUERY TO PREVENT HERO IMAGE OVERLAP */
 @media(max-width: 1152px) {
     .hero .left img {
-        /* Make the image scale with the screen size */
         width: 100%;
         height: auto;
-        /* Ensure the image container doesn't force a massive width */
         max-width: 450px;
     }
 
     .hero .left {
-        /* Allow the left container to shrink */
         width: 40%;
     }
 
     .hero .right {
-        /* Allow the right container to grow */
         width: 60%;
         padding-right: 15px;
     }
 
     .hero .right h6 {
         font-size: 6vw;
-        /* Scale text down a bit */
     }
 
     .hero .right h1 {
         font-size: 4vw;
-        /* Scale text down a bit */
         margin-bottom: 1rem;
     }
 
     .hero .right p {
-        /* Adjust font size for better readability on tablets/mid-size screens */
         font-size: 1rem !important;
     }
 }
 
 
-/* --- Mobile Menu Styles (Hidden on Desktop) --- */
+/* --- Mobile Menu & Hamburger Base Styles (Hidden on Desktop) --- */
 .nav-toggle {
     display: none;
     cursor: pointer;
@@ -433,10 +409,72 @@ section.services .card-grid .card:hover p {
 
 /* --- Mobile Styles (max-width: 600px) --- */
 @media(max-width: 600px) {
-    /* HIDE THE IMAGE AND FIX HERO LAYOUT */
+
+    /* --- MOBILE MENU FIX --- */
+    .mobile-menu {
+        /* THIS IS THE CRITICAL FIX */
+        display: flex !important; /* Force display flex to make the menu visible */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: var(--bgDark);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* HIDE THE DESKTOP NAV ITEMS */
+    header nav .left {
+        display: none;
+    }
+
+    header nav .right {
+        display: none;
+    }
+
+    /* SHOW HAMBURGER */
+    .nav-toggle {
+        display: block;
+        order: -1;
+        margin-left: 15px;
+    }
+
+    header nav {
+        justify-content: space-between;
+        padding: 1rem 0;
+    }
+
+    /* HAMBURGER 'X' STYLES */
+    .nav-toggle.active .hamburger {
+        background-color: transparent;
+    }
+
+    .nav-toggle.active .hamburger::before {
+        transform: rotate(45deg);
+    }
+
+    .nav-toggle.active .hamburger::after {
+        transform: rotate(-45deg);
+    }
+    
+    .mobile-menu a {
+        color: var(--white);
+        text-decoration: none;
+        font-size: 1.5rem;
+        padding: 1rem 0;
+        width: 80%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* HERO SECTION ADJUSTMENTS */
     .hero .left {
         display: none;
-        /* Hides the div containing the image */
     }
 
     .hero {
@@ -447,11 +485,8 @@ section.services .card-grid .card:hover p {
 
     .hero .right {
         flex: unset;
-        /* Remove flex-1 property */
         width: 100%;
-        /* Ensure it takes full available width */
         padding: 0 15px;
-        /* Add some horizontal padding */
         margin-top: 0;
         margin-bottom: 1rem;
     }
@@ -476,19 +511,17 @@ section.services .card-grid .card:hover p {
     .hero .right div a {
         display: block;
         margin: 10px auto;
-        /* Center the buttons */
     }
 
     .hero .right .btn-tertiary,
     .hero .right .btn-secondary {
         width: 80%;
-        /* Make them wider on mobile */
         margin-left: auto;
         margin-right: auto;
     }
     
     .btn-tertiary {
-        /* On mobile, use the primary color for border to match CV button */
+        /* Match CV button color scheme on mobile */
         border-color: var(--primary);
         color: var(--white);
     }
@@ -500,53 +533,44 @@ section.services .card-grid .card:hover p {
 
     .btn-primary {
         margin-top: 0;
-        /* Remove the negative margin */
     }
 
 
-    /* HAMBURGER MENU CONTROLS */
-    header nav .left {
-        display: none;
-        /* Hide the desktop menu links */
-    }
-
-    header nav .right {
-        display: none;
-        /* Hide the Contact button too */
-    }
-
-    .nav-toggle {
-        display: block;
-        /* Show the hamburger icon */
-        order: -1;
-        /* Place it at the start of the flex container */
-        margin-left: 15px;
-    }
-
-    header nav {
-        justify-content: space-between;
-        /* Ensure the top nav uses space-between */
-        padding: 1rem 0;
-    }
-
-    /* MOBILE MENU STYLES - FIX APPLIED HERE */
-    .mobile-menu {
-        /* IMPORTANT: Must be flex for the menu to structure correctly and be visible */
-        display: flex; 
-        position: fixed;
-        top: 0;
-        left: 0;
+    /* OTHER MOBILE SECTION ADJUSTMENTS */
+    section.services {
         width: 100%;
-        height: 100vh;
-        background-color: var(--bgDark);
-        z-index: 999;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        padding: 3rem 15px;
+        box-sizing: border-box;
     }
-    
-    /* ... (rest of mobile styles) ... */
-    
+
+    section.services .card-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    section.services .card-grid .card {
+        padding: 1rem;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card-container {
+        width: 100%;
+    }
+
+    .card {
+        padding: 1rem 1rem;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card h2 {
+        font-size: 1.2rem;
+    }
 }
