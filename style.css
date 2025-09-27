@@ -410,24 +410,6 @@ section.services .card-grid .card:hover p {
 /* --- Mobile Styles (max-width: 600px) --- */
 @media(max-width: 600px) {
 
-    /* --- MOBILE MENU FIX --- */
-    .mobile-menu {
-        /* THIS IS THE CRITICAL FIX */
-        display: flex !important; /* Force display flex to make the menu visible */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background-color: var(--bgDark);
-        z-index: 999;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
     /* HIDE THE DESKTOP NAV ITEMS */
     header nav .left {
         display: none;
@@ -448,7 +430,29 @@ section.services .card-grid .card:hover p {
         justify-content: space-between;
         padding: 1rem 0;
     }
-
+    
+    /* MOBILE MENU STYLES - FIX APPLIED HERE */
+    .mobile-menu {
+        display: flex; /* Ensure it's visible on mobile */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: var(--bgDark);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .mobile-menu.open {
+        /* THIS IS THE CRITICAL FIX: Explicitly define the final, non-transformed state */
+        transform: translateX(0);
+    }
+    
     /* HAMBURGER 'X' STYLES */
     .nav-toggle.active .hamburger {
         background-color: transparent;
@@ -521,7 +525,6 @@ section.services .card-grid .card:hover p {
     }
     
     .btn-tertiary {
-        /* Match CV button color scheme on mobile */
         border-color: var(--primary);
         color: var(--white);
     }
