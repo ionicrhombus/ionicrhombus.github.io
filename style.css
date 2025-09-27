@@ -1,1 +1,439 @@
-:root { --primary: rgb(27,133,184); --bgDark: rgb(12, 12, 12); --white: rgb(250, 250, 250); --secondary: rgb(0, 59, 50); --bgLight: rgb(190, 181, 181); } * { padding: 0; margin: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; } html { scroll-behavior: smooth; } header.top { background-color: var(--bgDark); } header.bottom { background-color: var(--bgDark); clip-path: polygon(0 0, 100% 0, 100% 100%, 73% 94%, 0 96%); } .large-image { width: 400px; /* Adjust the width as needed */ height: 400px; /* Maintains the aspect ratio */ } header nav .left a { color: var(--white); text-decoration: none; margin-right: 2rem; text-transform: uppercase; transition: all 0.2s ease; } header nav .left a:hover { color: var(--primary); } header nav { padding: 2rem 0; } header nav .logo { margin-right: 3rem; } body { font-family: "Poppins", sans-serif; } .card-container { display: flex; flex-direction: column; align-items: center; /* Center the cards horizontally within the container */ justify-content: center; /* Center the cards vertically within the container */ gap: 20px; width: 80%; /* Adjust as needed */ margin: 0 auto; /* Center the container horizontally */ } /* Style the .card elements */ .card { background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 3%; text-align: center; width: 100%; /* Ensure cards take the full width of the container */ box-sizing: border-box; /* Include padding and border in the element's total width and height */ } .container { max-width: 1152px; padding: 0 15px; margin: 0 auto; } .hero { padding-top: 0rem; padding-bottom: 1rem; } .hero .left img { width: 700px; height: 700px; } .hero .right { color: var(--white); } .hero .right h6 { font-size: 4vw; color: var(--primary); margin-bottom: 0.5rem; } .hero .right h1 { font-size: 3vw; font-weight: 100; line-height: 1.2; margin-bottom: 2rem; } .hero .right h1 span { color: var(--primary); } .hero .right p { line-height: 1.9; margin-bottom: 1rem; } section { padding: 3rem; } section.about h1 { margin-bottom: 1rem; font-size: 1.6rem; font-weight: 600; } section.about h1 span { color: var(--primary); } section.about h3 { font-size: 1rem; margin-bottom: 1rem; font-weight: 600; } section.about p { font-family: "Lato", sans-serif; color: var(--secondary); line-height: 1.2rem; margin-bottom: 2rem; } section.about .socials { display: flex; } section.about .socials a { display: flex; align-items: center; justify-content: center; width: 35px; margin-right: 0.8rem; border-radius: 50%; } section.about .socials a:hover { background: var(--primary); } section.services { background: rgb(17, 17, 17); } .services-head { color: rgb(10, 9, 9); text-align: center; margin-bottom: 1rem; line-height: 0.5rem; color: var(--primary); } .services-head + p { color: var(--white); font-family: "Lato", sans-serif; margin-bottom: 1rem; text-align: center; margin-bottom: 6rem; font-weight: 400; } .card img { background: white; } section.services .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 100%; /* Ensure grid takes full width of its container */ margin: 0 auto; /* Center grid horizontally */ padding-top: 2rem; /* Adjust as needed */ } section.services .card-grid .card { background: var(--white); padding: 3rem 2rem; text-align: center; transition: all 0.2s ease; width: 100%; /* Make the card take full width of its grid cell */ box-sizing: border-box; /* Include padding in the width */ } section.services .card-grid .card img { position: absolute; top: -1.5rem; left: 50%; transform: translateX(-50%); color: var(); } section.services .card-grid .card h2 { font-weight: 600; font-size: 1.2rem; margin-bottom: 0.5rem; } section.services .card-grid .card p { font-family: "Lato", sans-serif; color: var(--seconday); line-height: 1.6; } section.services .card-grid .card:hover { background: var(--primary); } section.services .card-grid .card:hover h2 { color: var(--white); } section.services .card-grid .card:hover p { color: var(--white); } .flex { display: flex; } .items-centre { align-items: center; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; } .justify-right { justify-content: right; } .btn { padding: 0.6rem 2rem; font-size: 1rem; font-weight: 600; border: 2px solid transparent; outline: none; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease; } .btn-primary { background-color: var(--primary); color: var(--secondary); margin-top: -15rem; } .btn-primary:hover { background: transparent; border-color: var(--primary); color: var(--primary); } .flex-1 { flex: 1; } .btn-secondary { background: transparent; color: var(--primary); border-color: var(--primary); } .btn-secondary:hover { background: var(--primary); color: var(--secondary); } @media(max-width: 600px) { section.services { width:100%; padding: 3rem; box-sizing: border-box; /* Ensure padding is included in the width */ } section.services .card-grid { display: flex; flex-direction: column; align-items: center; /* Center the cards horizontally within the container */ justify-content: center; /* Center the cards vertically within the container */ gap: 20px; width: 100%; /* Adjust as needed */ margin: 0 auto; /* Center the container horizontally */ } section.services .card-grid .card { background: var(--white); padding: 1rem; /* Ensure padding is consistent */ text-align: center; transition: all 0.2s ease; max-width: 100%; /* Ensure card takes full width */ box-sizing: border-box; } .card-container { display: flex; flex-direction: column; align-items: center; /* Center the cards horizontally within the container */ justify-content: center; /* Center the cards vertically within the container */ gap: 20px; width: 100%; /* Adjust as needed */ margin: 0 auto; /* Center the container horizontally */ } .card { background: var(--white); padding: 1rem 1rem; text-align: center; font-size: 2.5vw; transition: all 0.2s ease; width: 100%; /* Make the card take full width of its grid cell */ box-sizing: border-box; /* Ensure padding is included in the width */ } .hero .left img { width: 100%; height: 50%; } .hero .right { color: var(--white); margin-top: 0rem; margin-bottom:1rem; } .hero .right h6 { font-size: 4vw; color: var(--primary); margin-bottom: 0.5rem; } .hero .right h1 { font-size: 3.5vw; font-weight: 100; line-height: 1.2; margin-bottom: .5rem; } .hero .right h1 span { color: var(--primary); } .hero .right p { line-height: 1.9; font-size:.5rem; margin-bottom: 1rem; } .btn { padding: 0.6rem 3rem; font-size: 1rem; font-weight: 600; border: 2px solid transparent; outline: none; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease; } .btn-primary { background-color: var(--primary); color: var(--secondary); margin-top: -15rem; } .btn-primary:hover { background: transparent; border-color: var(--primary); color: var(--primary); } .flex-1 { flex: 1; } .btn-secondary { background: transparent; color: var(--primary); border-color: var(--primary); } .btn-secondary:hover { background: var(--primary); color: var(--secondary); } header nav .left a { font-size: 0.5rem; /* Decrease font size */ margin-right: 0.5rem; /* Reduce spacing between links */ } header nav .logo { display: none; /* Hide logo on smaller screens if needed */ } header nav .right a { font-size: 0.4rem; /* Decrease font size */ margin-right: 0.5rem; /* Reduce spacing between links */ } header nav .right .btn { padding: 0.1rem 1rem; font-size: .5rem; font-weight: 600; border: 2px solid transparent; outline: none; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease; } .btn-primary { background-color: var(--primary); color: var(--secondary); margin-top: -15rem; } .btn-primary:hover { background: transparent; border-color: var(--primary); color: var(--primary); } }
+:root {
+    --primary: rgb(27, 133, 184);
+    --bgDark: rgb(12, 12, 12);
+    --white: rgb(250, 250, 250);
+    --secondary: rgb(0, 59, 50);
+    --bgLight: rgb(190, 181, 181);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+header.top {
+    background-color: var(--bgDark);
+}
+
+header.bottom {
+    background-color: var(--bgDark);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 73% 94%, 0 96%);
+}
+
+.large-image {
+    width: 400px;
+    /* Adjust the width as needed */
+    height: 400px;
+    /* Maintains the aspect ratio */
+}
+
+header nav .left a {
+    color: var(--white);
+    text-decoration: none;
+    margin-right: 2rem;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+header nav .left a:hover {
+    color: var(--primary);
+}
+
+header nav {
+    padding: 2rem 0;
+}
+
+header nav .logo {
+    margin-right: 3rem;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center the cards horizontally within the container */
+    justify-content: center;
+    /* Center the cards vertically within the container */
+    gap: 20px;
+    width: 80%;
+    /* Adjust as needed */
+    margin: 0 auto;
+    /* Center the container horizontally */
+}
+
+/* Style the .card elements */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 3%;
+    text-align: center;
+    width: 100%;
+    /* Ensure cards take the full width of the container */
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}
+
+.container {
+    max-width: 1152px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.hero {
+    padding-top: 0rem;
+    padding-bottom: 1rem;
+}
+
+.hero .left img {
+    width: 700px;
+    height: 700px;
+}
+
+.hero .right {
+    color: var(--white);
+}
+
+.hero .right h6 {
+    font-size: 4vw;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.hero .right h1 {
+    font-size: 3vw;
+    font-weight: 100;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.hero .right h1 span {
+    color: var(--primary);
+}
+
+.hero .right p {
+    line-height: 1.9;
+    margin-bottom: 1rem;
+}
+
+section {
+    padding: 3rem;
+}
+
+section.about h1 {
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+section.about h1 span {
+    color: var(--primary);
+}
+
+section.about h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+section.about p {
+    font-family: "Lato", sans-serif;
+    color: var(--secondary);
+    line-height: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+section.about .socials {
+    display: flex;
+}
+
+section.about .socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    margin-right: 0.8rem;
+    border-radius: 50%;
+}
+
+section.about .socials a:hover {
+    background: var(--primary);
+}
+
+section.services {
+    background: rgb(17, 17, 17);
+}
+
+.services-head {
+    color: rgb(10, 9, 9);
+    text-align: center;
+    margin-bottom: 1rem;
+    line-height: 0.5rem;
+    color: var(--primary);
+}
+
+.services-head + p {
+    color: var(--white);
+    font-family: "Lato", sans-serif;
+    margin-bottom: 1rem;
+    text-align: center;
+    margin-bottom: 6rem;
+    font-weight: 400;
+}
+
+.card img {
+    background: white;
+}
+
+section.services .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    max-width: 100%;
+    /* Ensure grid takes full width of its container */
+    margin: 0 auto;
+    /* Center grid horizontally */
+    padding-top: 2rem;
+    /* Adjust as needed */
+}
+
+section.services .card-grid .card {
+    background: var(--white);
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    width: 100%;
+    /* Make the card take full width of its grid cell */
+    box-sizing: border-box;
+    /* Include padding in the width */
+}
+
+section.services .card-grid .card img {
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var();
+}
+
+section.services .card-grid .card h2 {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+section.services .card-grid .card p {
+    font-family: "Lato", sans-serif;
+    color: var(--seconday);
+    line-height: 1.6;
+}
+
+section.services .card-grid .card:hover {
+    background: var(--primary);
+}
+
+section.services .card-grid .card:hover h2 {
+    color: var(--white);
+}
+
+section.services .card-grid .card:hover p {
+    color: var(--white);
+}
+
+.flex {
+    display: flex;
+}
+
+.items-centre {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-right {
+    justify-content: right;
+}
+
+.btn {
+    padding: 0.6rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    outline: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--secondary);
+    margin-top: -15rem;
+}
+
+.btn-primary:hover {
+    background: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: var(--secondary);
+}
+
+/* --- Mobile Styles --- */
+@media(max-width: 600px) {
+    /* 1. HIDE THE IMAGE ON MOBILE */
+    .hero .left {
+        display: none; /* Hides the div containing the image */
+    }
+
+    /* 2. ALLOW THE RIGHT (TEXT) COLUMN TO TAKE FULL WIDTH */
+    .hero .right {
+        /* Remove flex-1 property to allow it to take full width of its parent */
+        flex: unset; 
+    }
+
+    /* 3. ENSURE HERO SECTION USES COLUMN LAYOUT ON MOBILE */
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center; /* Center the text content */
+    }
+
+    /* 4. ADJUSTMENTS FOR THE NEW LAYOUT */
+    .hero .right {
+        color: var(--white);
+        margin-top: 0;
+        margin-bottom: 1rem;
+        width: 100%; /* Ensure it takes full available width */
+        padding: 0 15px; /* Add some horizontal padding */
+    }
+
+    .hero .right p {
+        /* Adjust font-size to be more readable on mobile */
+        font-size: 1rem;
+        padding-right: 0 !important; /* Remove the desktop padding-right */
+    }
+
+    .hero .right h6 {
+        font-size: 8vw; /* Increase size for visibility */
+    }
+
+    .hero .right h1 {
+        font-size: 6vw; /* Increase size for visibility */
+        margin-bottom: 1rem;
+    }
+
+    /* Fix the placement of the 'Contact' button in the top header */
+    .btn-primary {
+        margin-top: 0; /* Remove the negative margin */
+    }
+
+    /* Rest of your mobile styles */
+    section.services {
+        width: 100%;
+        padding: 3rem 15px; /* Adjust padding for mobile view */
+        box-sizing: border-box;
+    }
+
+    section.services .card-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    section.services .card-grid .card {
+        background: var(--white);
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: var(--white);
+        padding: 1rem 1rem;
+        text-align: center;
+        font-size: 1rem; /* Adjust font size to be readable */
+        transition: all 0.2s ease;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card h2 {
+        font-size: 1.2rem;
+    }
+    .card p {
+        font-size: 1rem;
+    }
+
+    /* Hero section overrides (mostly for the text sizing) */
+    .hero .left img {
+        width: 100%;
+        height: 50%;
+    }
+
+    /* Navigation adjustments */
+    header nav .left a {
+        font-size: 0.8rem;
+        margin-right: 1rem;
+    }
+
+    header nav .logo {
+        display: none;
+    }
+
+    header nav .right a {
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+    }
+
+    header nav .right .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
