@@ -4,6 +4,8 @@
     --white: rgb(250, 250, 250);
     --secondary: rgb(0, 59, 50);
     --bgLight: rgb(190, 181, 181);
+    --linkedin: #0A66C2;
+    --ub-blue: #004C97;
 }
 
 * {
@@ -83,6 +85,19 @@ body {
     /* Ensure cards take the full width of the container */
     box-sizing: border-box;
     /* Include padding and border in the element's total width and height */
+}
+
+/* Style the links inside the research cards */
+.card-link {
+    color: var(--primary);
+    /* Use your primary color */
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.card-link:hover {
+    color: var(--secondary);
 }
 
 .container {
@@ -282,6 +297,7 @@ section.services .card-grid .card:hover p {
     transition: all 0.2s ease;
 }
 
+/* Primary Button (Contact) */
 .btn-primary {
     background-color: var(--primary);
     color: var(--secondary);
@@ -298,6 +314,7 @@ section.services .card-grid .card:hover p {
     flex: 1;
 }
 
+/* Secondary Button (Download CV) */
 .btn-secondary {
     background: transparent;
     color: var(--primary);
@@ -309,59 +326,251 @@ section.services .card-grid .card:hover p {
     color: var(--secondary);
 }
 
-/* --- Mobile Styles --- */
-@media(max-width: 600px) {
-    /* 1. HIDE THE IMAGE ON MOBILE */
+/* Tertiary Buttons (Faculty & LinkedIn) */
+.btn-tertiary {
+    padding: 0.6rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--white);
+    outline: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    color: var(--white);
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.btn-tertiary:nth-child(1) {
+    /* Target the first btn-tertiary (Faculty Page) */
+    background-color: var(--ub-blue);
+    border-color: var(--ub-blue);
+}
+
+.btn-tertiary:nth-child(2) {
+    /* Target the second btn-tertiary (LinkedIn) */
+    background-color: var(--linkedin);
+    border-color: var(--linkedin);
+}
+
+.btn-tertiary:hover {
+    opacity: 0.9;
+}
+
+.hero .right .btn-secondary {
+    margin-left: 1rem;
+}
+
+/* NEW INTERMEDIATE MEDIA QUERY TO PREVENT OVERLAP */
+@media(max-width: 1152px) {
+    .hero .left img {
+        /* Make the image scale with the screen size */
+        width: 100%;
+        height: auto;
+        /* Ensure the image container doesn't force a massive width */
+        max-width: 450px;
+    }
+
     .hero .left {
-        display: none; /* Hides the div containing the image */
+        /* Allow the left container to shrink */
+        width: 40%;
     }
 
-    /* 2. ALLOW THE RIGHT (TEXT) COLUMN TO TAKE FULL WIDTH */
     .hero .right {
-        /* Remove flex-1 property to allow it to take full width of its parent */
-        flex: unset; 
-    }
-
-    /* 3. ENSURE HERO SECTION USES COLUMN LAYOUT ON MOBILE */
-    .hero {
-        flex-direction: column;
-        align-items: center;
-        text-align: center; /* Center the text content */
-    }
-
-    /* 4. ADJUSTMENTS FOR THE NEW LAYOUT */
-    .hero .right {
-        color: var(--white);
-        margin-top: 0;
-        margin-bottom: 1rem;
-        width: 100%; /* Ensure it takes full available width */
-        padding: 0 15px; /* Add some horizontal padding */
-    }
-
-    .hero .right p {
-        /* Adjust font-size to be more readable on mobile */
-        font-size: 1rem;
-        padding-right: 0 !important; /* Remove the desktop padding-right */
+        /* Allow the right container to grow */
+        width: 60%;
+        padding-right: 15px;
     }
 
     .hero .right h6 {
-        font-size: 8vw; /* Increase size for visibility */
+        font-size: 6vw;
+        /* Scale text down a bit */
     }
 
     .hero .right h1 {
-        font-size: 6vw; /* Increase size for visibility */
+        font-size: 4vw;
+        /* Scale text down a bit */
         margin-bottom: 1rem;
     }
 
-    /* Fix the placement of the 'Contact' button in the top header */
-    .btn-primary {
-        margin-top: 0; /* Remove the negative margin */
+    .hero .right p {
+        /* Adjust font size for better readability on tablets/mid-size screens */
+        font-size: 1rem !important;
+    }
+}
+
+
+/* --- Mobile Menu Styles (Hidden on Desktop) --- */
+.nav-toggle {
+    display: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.hamburger {
+    width: 25px;
+    height: 3px;
+    background-color: var(--white);
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background-color: var(--white);
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before {
+    transform: translateY(-8px);
+}
+
+.hamburger::after {
+    transform: translateY(8px);
+}
+
+/* --- Mobile Styles (max-width: 600px) --- */
+@media(max-width: 600px) {
+    /* HIDE THE IMAGE AND FIX HERO LAYOUT */
+    .hero .left {
+        display: none;
+        /* Hides the div containing the image */
     }
 
-    /* Rest of your mobile styles */
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero .right {
+        flex: unset;
+        /* Remove flex-1 property */
+        width: 100%;
+        /* Ensure it takes full available width */
+        padding: 0 15px;
+        /* Add some horizontal padding */
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    /* TEXT SIZING ADJUSTMENTS */
+    .hero .right h6 {
+        font-size: 8vw;
+    }
+
+    .hero .right h1 {
+        font-size: 6vw;
+        margin-bottom: 1rem;
+    }
+
+    .hero .right p {
+        font-size: 1rem;
+        line-height: 1.5;
+        padding-right: 0 !important;
+    }
+
+    /* BUTTON ADJUSTMENTS */
+    .hero .right div a {
+        display: block;
+        margin: 10px auto;
+        /* Center the buttons */
+    }
+
+    .hero .right .btn-tertiary,
+    .hero .right .btn-secondary {
+        width: 80%;
+        /* Make them wider on mobile */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-primary {
+        margin-top: 0;
+        /* Remove the negative margin */
+    }
+
+
+    /* HAMBURGER MENU CONTROLS */
+    header nav .left {
+        display: none;
+        /* Hide the desktop menu links */
+    }
+
+    header nav .right {
+        display: none;
+        /* Hide the Contact button too */
+    }
+
+    .nav-toggle {
+        display: block;
+        /* Show the hamburger icon */
+        order: -1;
+        /* Place it at the start of the flex container */
+        margin-left: 15px;
+    }
+
+    header nav {
+        justify-content: space-between;
+        /* Ensure the top nav uses space-between */
+        padding: 1rem 0;
+    }
+
+    /* MOBILE MENU STYLES */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: var(--bgDark);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mobile-menu.open {
+        transform: translateX(0);
+    }
+
+    .mobile-menu a {
+        color: var(--white);
+        text-decoration: none;
+        font-size: 1.5rem;
+        padding: 1rem 0;
+        width: 80%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* CLOSE BUTTON (X) STYLES */
+    .nav-toggle.active .hamburger {
+        background-color: transparent;
+    }
+
+    .nav-toggle.active .hamburger::before {
+        transform: rotate(45deg);
+    }
+
+    .nav-toggle.active .hamburger::after {
+        transform: rotate(-45deg);
+    }
+
+    /* OTHER MOBILE SECTION ADJUSTMENTS */
     section.services {
         width: 100%;
-        padding: 3rem 15px; /* Adjust padding for mobile view */
+        padding: 3rem 15px;
         box-sizing: border-box;
     }
 
@@ -398,7 +607,7 @@ section.services .card-grid .card:hover p {
         background: var(--white);
         padding: 1rem 1rem;
         text-align: center;
-        font-size: 1rem; /* Adjust font size to be readable */
+        font-size: 1rem;
         transition: all 0.2s ease;
         width: 100%;
         box-sizing: border-box;
@@ -406,34 +615,5 @@ section.services .card-grid .card:hover p {
 
     .card h2 {
         font-size: 1.2rem;
-    }
-    .card p {
-        font-size: 1rem;
-    }
-
-    /* Hero section overrides (mostly for the text sizing) */
-    .hero .left img {
-        width: 100%;
-        height: 50%;
-    }
-
-    /* Navigation adjustments */
-    header nav .left a {
-        font-size: 0.8rem;
-        margin-right: 1rem;
-    }
-
-    header nav .logo {
-        display: none;
-    }
-
-    header nav .right a {
-        font-size: 0.8rem;
-        margin-right: 0.5rem;
-    }
-
-    header nav .right .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
     }
 }
