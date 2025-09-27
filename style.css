@@ -56,100 +56,56 @@ header nav .right .btn {
   padding: 0.5rem 1rem;
 }
 
-/* HERO SECTION */
-/* HERO SECTION */
-header.bottom {
-  background-color: var(--bgDark);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 73% 94%, 0 96%);
-  padding: 4rem 2rem 2rem;
-}
-
-.hero {
-  display: flex;
-  flex-direction: row; /* Desktop: image left, text right */
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  max-width: 1152px;
-  margin: 0 auto;
-}
-
-.hero .left {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.hero .left img {
-  width: 100%;
-  max-width: 700px;
-  height: auto;
-  border-radius: 8px;
-}
-
-.hero .right {
-  flex: 1;
-  color: var(--white);
-}
-
-.hero .right h6 {
-  font-size: 2.5rem; /* Desktop size */
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-
-.hero .right h1 {
-  font-size: 4rem; /* Desktop size */
-  font-weight: 100;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-.hero .right h1 span {
-  color: var(--primary);
-}
-
-.hero .right p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 1rem;
-}
-
-/* TABLET */
-@media(max-width: 1023px) {
+/* HERO IMAGE & TEXT RESPONSIVE FIX */
+@media(max-width: 1024px) {
   .hero {
-    gap: 1.5rem;
-  }
-  .hero .right h6 {
-    font-size: 2rem;
-  }
-  .hero .right h1 {
-    font-size: 3rem;
-  }
-  .hero .right p {
-    font-size: 1rem;
-  }
-}
-
-/* MOBILE */
-@media(max-width: 767px) {
-  .hero {
-    flex-direction: column; /* Stack image on top */
-    text-align: center;
-  }
-
-  .hero .left {
-    width: 100%;
-    margin-bottom: 1.5rem;
+    flex-direction: column; /* Stack image on top of text */
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
   }
 
   .hero .left img {
-    max-width: 100%;
+    width: 80%; /* Shrink image but keep aspect ratio */
     height: auto;
+    max-width: 400px;
+  }
+
+  .hero .right {
+    text-align: center;
+    width: 100%;
   }
 
   .hero .right h6 {
-    font-size: 1.8rem;
+    font-size: 2rem; /* scale name nicely */
+  }
+
+  .hero .right h1 {
+    font-size: 2.5rem; /* scale title nicely */
+    line-height: 1.2;
+  }
+
+  .hero .right p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .btn {
+    width: auto;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small mobile screens */
+@media(max-width: 600px) {
+  .hero .left img {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .hero .right h6 {
+    font-size: 1.5rem;
   }
 
   .hero .right h1 {
@@ -158,8 +114,25 @@ header.bottom {
 
   .hero .right p {
     font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .card-container, .card-grid {
+    width: 95%;
+  }
+
+  section.services .card-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  section.services .card-grid .card {
+    width: 100%;
   }
 }
+
 
 /* CARDS */
 .card-container, .card-grid {
