@@ -18,24 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Menu Logic ---
     const navToggle = document.getElementById('nav-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    const navLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : []; // Check for existence
+    const navLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
 
     if (navToggle && mobileMenu) {
-        // Function to close the menu
-        const closeMenu = () => {
-            mobileMenu.classList.remove('open');
-            navToggle.classList.remove('active');
+        const updateMenuState = (isOpen) => {
+            mobileMenu.classList.toggle('open', isOpen);
+            navToggle.classList.toggle('active', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            document.body.classList.toggle('menu-open', isOpen);
         };
 
-        // Toggle menu on button click
+        const closeMenu = () => updateMenuState(false);
+
         navToggle.addEventListener('click', () => {
-            // Toggle the 'open' class on the menu for visibility
-            mobileMenu.classList.toggle('open');
-            // Toggle the 'active' class on the hamburger for the 'X' animation
-            navToggle.classList.toggle('active');
+            const shouldOpen = !mobileMenu.classList.contains('open');
+            updateMenuState(shouldOpen);
         });
 
-        // Close menu when a link is clicked (for navigation)
         navLinks.forEach(link => {
             link.addEventListener('click', closeMenu);
         });
