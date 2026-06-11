@@ -12,33 +12,28 @@
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink); background:var(--bg); line-height:1.55;
-    -webkit-font-smoothing:antialiased;
+    color:var(--ink); background:var(--bg); line-height:1.55; -webkit-font-smoothing:antialiased;
   }
   .wrap{ max-width:960px; margin:0 auto; padding:0 22px; }
 
-  /* top bar */
   .topbar{ border-top:4px solid var(--blue); }
   .nav{ display:flex; align-items:center; justify-content:space-between; padding:18px 0; }
   .brand{ font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal); }
   .home{ font-size:15px; font-weight:600; color:var(--blue); text-decoration:none; }
   .home:hover{ text-decoration:underline; }
 
-  /* hero */
   .hero{ padding:34px 0 26px; border-bottom:1px solid var(--line); }
   .hero h1{ font-size:42px; line-height:1.05; color:var(--ink); letter-spacing:-.5px; }
   .hero p{ font-size:18px; color:var(--muted); margin-top:12px; max-width:620px; }
 
-  /* grid */
-  .grid{
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:20px; padding:32px 0 8px;
-  }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; padding:32px 0 8px; }
   .card{
     display:block; text-decoration:none; color:inherit; background:var(--card);
     border:1px solid var(--line); border-radius:14px; padding:22px 22px 20px;
     transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
+  .card[role="button"]{ cursor:pointer; }
+  .card[role="button"]:focus-visible{ outline:3px solid rgba(0,91,187,.35); outline-offset:2px; }
   .card:hover{ transform:translateY(-3px); box-shadow:0 12px 28px rgba(20,40,70,.10); border-color:#CBD8EA; }
   .card .tag{ display:inline-block; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
     color:var(--teal); background:var(--tint); padding:4px 10px; border-radius:999px; }
@@ -47,7 +42,6 @@
   .card .go{ display:inline-block; margin-top:14px; font-size:14px; font-weight:700; color:var(--blue); }
   .card .go:after{ content:" \2192"; }
 
-  /* a "soon" / placeholder card looks quieter and isn't clickable */
   .soon{ border-style:dashed; background:transparent; cursor:default; }
   .soon:hover{ transform:none; box-shadow:none; border-color:var(--line); }
   .soon .tag{ color:var(--muted); background:#EEF1F5; }
@@ -56,6 +50,36 @@
   footer{ margin-top:40px; padding:26px 0 50px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; }
   footer a{ color:var(--blue); text-decoration:none; font-weight:600; }
   footer a:hover{ text-decoration:underline; }
+
+  /* ---- prompt popup ---- */
+  .overlay{ position:fixed; inset:0; background:rgba(20,30,46,.55); display:flex; align-items:flex-start;
+    justify-content:center; padding:40px 16px; overflow:auto; z-index:1000; }
+  .overlay[hidden]{ display:none; }
+  .modal{ background:#fff; border-radius:16px; max-width:680px; width:100%; padding:26px 26px 30px;
+    box-shadow:0 24px 60px rgba(10,20,40,.35); position:relative; }
+  .modal h2{ font-size:24px; color:var(--ink); }
+  .modal .modal-sub{ font-size:15px; color:var(--muted); margin:6px 0 18px; }
+  .close{ position:absolute; top:16px; right:18px; border:none; background:none; font-size:26px; line-height:1;
+    color:var(--muted); cursor:pointer; padding:4px; border-radius:8px; }
+  .close:hover{ color:var(--ink); background:#F0F2F6; }
+
+  .prompt{ border:1px solid var(--line); border-radius:12px; background:var(--tint); margin-bottom:18px; overflow:hidden; }
+  .prompt-head{ display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 14px; border-bottom:1px solid var(--line); background:#fff; }
+  .prompt-name{ font-size:15px; font-weight:700; color:var(--ink); }
+  .copy{ font-size:13px; font-weight:700; color:#fff; background:var(--teal); border:none;
+    padding:7px 14px; border-radius:8px; cursor:pointer; white-space:nowrap; }
+  .copy:hover{ background:#005f68; }
+  .copy.ok{ background:var(--blue); }
+  .prompt-body{ margin:0; padding:14px 16px; font-family:"SFMono-Regular",Consolas,"Courier New",monospace;
+    font-size:13px; line-height:1.5; color:var(--ink); white-space:pre-wrap; word-break:break-word; }
+  .prompt-body .h{ color:var(--teal); font-weight:700; }
+
+  @media (max-width:520px){
+    .hero h1{ font-size:32px; }
+    .modal{ padding:20px 18px 24px; }
+    .prompt-body{ font-size:12px; }
+  }
 </style>
 </head>
 <body>
@@ -64,7 +88,6 @@
   <div class="wrap">
     <nav class="nav">
       <span class="brand">Professor Dom</span>
-      <!-- Links back to your homepage at professordom.com -->
       <a class="home" href="/">&#8592; Home</a>
     </nav>
   </div>
@@ -81,27 +104,24 @@
   <div class="grid">
 
     <!-- ============ RESOURCE CARD ============
-         To add a new resource later, copy one whole <a class="card"> block
-         below, then change the href, the tag, the title, and the description. -->
+         To add a new resource later, copy one whole card block below,
+         then change the link, the tag, the title, and the description. -->
     <a class="card" href="roi-calculator.html">
       <span class="tag">Tool</span>
-      <h2>AI ROI Calculator</h2>
+      <h2>Honest AI ROI Calculator</h2>
       <p>Run the number on one process and see what actually reaches your bottom line, not the figure a vendor quotes.</p>
       <span class="go">Open the calculator</span>
     </a>
 
-    <!-- This card points to the worksheet PDF. Upload the PDF next to this
-         page as roi-worksheet.pdf and the link will work. -->
-    <a class="card" href="roi-worksheet.pdf">
-      <span class="tag">Worksheet</span>
-      <h2>AI ROI Worksheet</h2>
-      <p>A one-page version you can print and fill in by hand. The same math, on paper.</p>
-      <span class="go">Download the PDF</span>
-    </a>
+    <!-- Opens the prompt popup (no separate page needed) -->
+    <div class="card" id="promptsCard" role="button" tabindex="0" aria-haspopup="dialog">
+      <span class="tag">Prompts</span>
+      <h2>AI Example Prompts</h2>
+      <p>The two prompts from the talk, ready to copy and paste into your AI tool.</p>
+      <span class="go">View the prompts</span>
+    </div>
 
-    <!-- A placeholder so the row stays balanced and you can see the pattern.
-         When you add a real resource, turn this into a normal "card" (remove
-         the word "soon" from the class) or just delete it. -->
+    <!-- Placeholder. Turn it into a real card later, or delete it. -->
     <div class="card soon">
       <span class="tag">Coming soon</span>
       <h2>More on the way</h2>
@@ -114,9 +134,111 @@
 <footer>
   <div class="wrap">
     <a href="/">&#8592; Back to professordom.com</a>
-    &nbsp;&middot;&nbsp; Professor Dom AI Resources
+    &nbsp;&middot;&nbsp; Professor Dom &middot; AI Resources
   </div>
 </footer>
+
+<!-- ============ PROMPT POPUP ============ -->
+<div class="overlay" id="promptModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <button class="close" id="pmClose" aria-label="Close">&times;</button>
+    <h2 id="pmTitle">AI Example Prompts</h2>
+    <p class="modal-sub">Copy and paste these into your AI tool, then fill in the parts in brackets.</p>
+
+    <div class="prompt">
+      <div class="prompt-head">
+        <span class="prompt-name">Build a tool from your spreadsheets</span>
+        <button class="copy" data-target="p1">Copy</button>
+      </div>
+      <pre id="p1" class="prompt-body"></pre>
+    </div>
+
+    <div class="prompt">
+      <div class="prompt-head">
+        <span class="prompt-name">Summarize a meeting</span>
+        <button class="copy" data-target="p2">Copy</button>
+      </div>
+      <pre id="p2" class="prompt-body"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var PROMPTS = {
+    p1:
+"Build me one HTML file that turns my spreadsheets into a dashboard. No installs.\n\n" +
+"## My files\n" +
+"- [a few rows from each sheet, and what each column means]\n\n" +
+"## What I want to see\n" +
+"- [the totals, trends, and breakdowns you wish you had]\n\n" +
+"## How it should work\n" +
+"- [I drag files in, it builds the report, opens by double-click]\n\n" +
+"If a column is unclear, ask before guessing. Keep it simple.\n\n" +
+"<<< paste your sample rows below >>>",
+    p2:
+"Summarize this transcript in this structure. Real names. Only what was said.\n\n" +
+"## Decisions made\n" +
+"- [decision]  (decided by [name])\n\n" +
+"## Action items\n" +
+"- [owner]  \u00b7  [task]  \u00b7  [due, or \"TBD\"]\n\n" +
+"## Open questions\n" +
+"- [question]  \u00b7  [who needs to answer]\n\n" +
+"## Risks raised\n" +
+"- [risk]  \u00b7  [who raised it]\n\n" +
+"Only what was said. Don't invent. If ownership is unclear, flag it.\n\n" +
+"<<< paste transcript below >>>"
+  };
+
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function render(raw){
+    return raw.split('\n').map(function(line){
+      var t = line.trim(), e = esc(line);
+      if(t.indexOf('##')===0 || t.indexOf('<<<')===0) return '<span class="h">'+e+'</span>';
+      return e;
+    }).join('\n');
+  }
+  document.getElementById('p1').innerHTML = render(PROMPTS.p1);
+  document.getElementById('p2').innerHTML = render(PROMPTS.p2);
+
+  var modal = document.getElementById('promptModal');
+  var card  = document.getElementById('promptsCard');
+  function open(){ modal.hidden = false; document.getElementById('pmClose').focus(); }
+  function close(){ modal.hidden = true; card.focus(); }
+
+  card.addEventListener('click', open);
+  card.addEventListener('keydown', function(e){
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); }
+  });
+  document.getElementById('pmClose').addEventListener('click', close);
+  modal.addEventListener('click', function(e){ if(e.target===modal) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !modal.hidden) close(); });
+
+  function copyText(text, btn){
+    function done(){
+      var old = btn.textContent;
+      btn.textContent = 'Copied!'; btn.classList.add('ok');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1500);
+    }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(e){}
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+  }
+  var btns = document.querySelectorAll('.copy');
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener('click', function(){
+      copyText(PROMPTS[this.getAttribute('data-target')], this);
+    });
+  }
+})();
+</script>
 
 </body>
 </html>
