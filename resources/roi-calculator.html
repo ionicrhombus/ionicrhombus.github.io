@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Honest AI ROI Calculator</title>
+<style>
+  :root{
+    --blue:#005BBB; --teal:#007681; --coral:#E56D54;
+    --ink:#1B2230; --muted:#5A6573; --line:#E2E8F1;
+    --paper:#F5F8FC; --card:#FFFFFF; --tint:#F0F5FB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:Arial,Helvetica,sans-serif;color:var(--ink);
+    background:var(--paper);line-height:1.5;
+    padding:18px 16px calc(28px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:560px;margin:0 auto}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:2.5px;color:var(--teal);text-transform:uppercase}
+  h1{font-size:26px;font-weight:700;color:var(--blue);margin:6px 0 4px;line-height:1.1}
+  .lede{font-size:14px;color:var(--muted);margin-bottom:18px}
+
+  /* result */
+  .result{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px;box-shadow:0 6px 20px rgba(20,40,70,.06);margin-bottom:16px}
+  .result .cap{font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+  .honest{font-size:52px;font-weight:700;color:var(--teal);line-height:1;margin:4px 0 2px;
+    transition:color .2s ease}
+  .honest.neg{color:var(--coral)}
+  @media (prefers-reduced-motion:reduce){.honest{transition:none}}
+  .verdict{display:inline-block;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;margin-top:8px}
+  .v-strong{background:rgba(0,118,129,.12);color:var(--teal)}
+  .v-ok{background:rgba(0,91,187,.10);color:var(--blue)}
+  .v-thin{background:rgba(229,109,84,.12);color:var(--coral)}
+  .v-no{background:rgba(229,109,84,.14);color:var(--coral)}
+  .splitrow{display:flex;gap:14px;margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+  .splitrow div{flex:1}
+  .splitrow .k{font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-transform:uppercase}
+  .hype{font-size:22px;font-weight:700;color:var(--coral)}
+  .gap{font-size:22px;font-weight:700;color:var(--ink)}
+  .hint{font-size:12px;color:var(--muted);margin-top:3px}
+
+  /* recapture signature */
+  .recap{background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .recap .top{display:flex;justify-content:space-between;align-items:baseline}
+  .recap label{font-size:14px;font-weight:700;color:var(--ink)}
+  .recap .val{font-size:24px;font-weight:700;color:var(--teal)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;
+    background:linear-gradient(to right,var(--teal) 0%,var(--teal) var(--p,40%),#CDD8E6 var(--p,40%),#CDD8E6 100%);
+    margin:14px 0 6px;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:3px solid var(--teal);box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--teal);box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .recap .sub{font-size:12.5px;color:var(--muted)}
+
+  /* inputs */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+  .field{display:flex;flex-direction:column}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .field .sub{font-size:11.5px;font-weight:400;color:var(--muted)}
+  .field input[type=text],.field input[type=number]{
+    font-family:inherit;font-size:16px;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+  .field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,91,187,.15)}
+
+  details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  summary{font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:" +";color:var(--muted)}
+  details[open] summary::after{content:" \2212"}
+  details p{font-size:13px;color:var(--muted);margin-top:8px}
+  details code{background:var(--tint);padding:2px 5px;border-radius:5px;font-size:12.5px;color:var(--ink)}
+  .foot{font-size:11.5px;color:var(--muted);margin-top:18px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Accelerate AI</div>
+  <h1>Honest AI ROI calculator</h1>
+  <p class="lede">Pick one process. Fill the blanks. See the number that will actually reach your bottom line, not the one the vendor quoted.</p>
+
+  <div class="result">
+    <div class="cap">Honest annual value</div>
+    <div class="honest" id="honest">$0</div>
+    <span class="verdict v-ok" id="verdict">Enter a few numbers to start</span>
+    <div class="splitrow">
+      <div>
+        <div class="k">Hype number</div>
+        <div class="hype" id="hype">$0</div>
+        <div class="hint">100% recapture, no costs</div>
+      </div>
+      <div>
+        <div class="k">The gap</div>
+        <div class="gap" id="gap">$0</div>
+        <div class="hint" id="hours">0 hrs/yr saved</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recap">
+    <div class="top">
+      <label for="recap">Recapture rate</label>
+      <span class="val" id="recapVal">40%</span>
+    </div>
+    <input type="range" id="recap" min="0" max="100" value="40" step="5" aria-describedby="recapSub">
+    <div class="sub" id="recapSub">The share of saved hours that actually becomes cut cost, new revenue, or extra volume. Drag it down and watch the value leak away.</div>
+  </div>
+
+  <div class="grid">
+    <div class="field full">
+      <label for="name">Process <span class="sub">(optional)</span></label>
+      <input type="text" id="name" placeholder="e.g. drafting proposals">
+    </div>
+    <div class="field">
+      <label for="now">Minutes now <span class="sub">per task, by hand</span></label>
+      <input type="number" id="now" inputmode="numeric" min="0" placeholder="90">
+    </div>
+    <div class="field">
+      <label for="ai">Minutes with AI <span class="sub">including checking and fixing</span></label>
+      <input type="number" id="ai" inputmode="numeric" min="0" placeholder="45">
+    </div>
+    <div class="field">
+      <label for="freq">Times per week</label>
+      <input type="number" id="freq" inputmode="numeric" min="0" placeholder="8">
+    </div>
+    <div class="field">
+      <label for="weeks">Weeks per year</label>
+      <input type="number" id="weeks" inputmode="numeric" min="0" value="50">
+    </div>
+    <div class="field">
+      <label for="rate">Loaded cost / hour <span class="sub">wage plus overhead</span></label>
+      <input type="number" id="rate" inputmode="numeric" min="0" placeholder="45">
+    </div>
+    <div class="field">
+      <label for="tco">Cost of ownership / yr <span class="sub">tools, ramp, oversight</span></label>
+      <input type="number" id="tco" inputmode="numeric" min="0" placeholder="900">
+    </div>
+  </div>
+
+  <details>
+    <summary>How this is calculated</summary>
+    <p><strong>Honest value</strong> = hours saved &times; loaded cost &times; recapture rate, minus cost of ownership.</p>
+    <p>Hours saved counts your AI time <em>with</em> verification, because checking the output is real work. The recapture rate is the honest haircut: saved time only counts if it turns into money. The <strong>hype number</strong> assumes 100% recapture and ignores cost, which is the figure most tools quote.</p>
+  </details>
+
+  <p class="foot">Built for the Accelerate AI session. A rough planning tool, not an accounting system.</p>
+</div>
+
+<script>
+(function(){
+  var ids=["now","ai","freq","weeks","rate","tco","recap"];
+  var el={};
+  ids.concat(["honest","hype","gap","hours","verdict","recapVal"]).forEach(function(i){el[i]=document.getElementById(i);});
+
+  function num(id){var v=parseFloat(el[id].value);return isFinite(v)&&v>=0?v:0;}
+  function money(n){
+    var neg=n<0;n=Math.round(Math.abs(n));
+    var s="$"+n.toLocaleString("en-US");
+    return neg?"\u2212"+s:s;
+  }
+
+  function recompute(){
+    var nowM=num("now"), aiM=num("ai"), freq=num("freq"), weeks=num("weeks")||50,
+        rate=num("rate"), tco=num("tco"), recap=num("recap");
+
+    // slider fill + label
+    el.recap.style.setProperty("--p", recap+"%");
+    el.recapVal.textContent = recap+"%";
+
+    var savedMin = Math.max(0, nowM - aiM);
+    var hoursYr = (savedMin/60) * freq * weeks;
+    var gross = hoursYr * rate;                 // hype number
+    var honest = gross * (recap/100) - tco;     // honest value
+    var gap = gross - honest;
+
+    el.hours.textContent = (Math.round(hoursYr)).toLocaleString("en-US") + " hrs/yr saved";
+    el.hype.textContent = money(gross);
+    el.gap.textContent = money(gap);
+    el.honest.textContent = money(honest);
+    el.honest.classList.toggle("neg", gross > 0 && honest <= 0);
+
+    // verdict
+    var v=el.verdict, cls="verdict ", txt="";
+    if(nowM<=0){
+      cls+="v-ok"; txt="Enter a few numbers to start";
+    } else if(savedMin<=0){
+      cls+="v-no"; txt="With verification, AI isn't faster here yet";
+    } else if(gross<=0){
+      cls+="v-ok"; txt="Add times per week and hourly cost";
+    } else if(honest<=0){
+      cls+="v-no"; txt="Not yet, a cost center as set up";
+    } else {
+      var ratio = honest/gross;
+      if(ratio>=0.5){cls+="v-strong"; txt="Strong return";}
+      else if(ratio>=0.2){cls+="v-ok"; txt="Worth it, with eyes open";}
+      else {cls+="v-thin"; txt="Thin, most of the value is leaking";}
+    }
+    v.className=cls; v.textContent=txt;
+  }
+
+  ids.forEach(function(i){el[i].addEventListener("input",recompute);});
+  recompute();
+})();
+</script>
+</body>
+</html>
