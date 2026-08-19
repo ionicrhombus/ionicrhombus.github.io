@@ -1,0 +1,15 @@
+Invoice ID,Customer,Amount Paid,Date Paid,Payment Method
+INV-1001,Riverside Cafe,450.00,2026-06-14,Card
+INV-1002,Dalton Landscaping,1200.00,2026-06-15,Check
+INV-1004,Ortiz Family Farm,320.00,2026-06-18,Cash
+INV-1005,Blue Heron Yoga,150.00,2026-06-20,Card
+INV-1006,Cornerstone Realty,1500.00,2026-06-22,Check
+INV-1008,Sunrise Bakery,240.00,2026-06-23,Card
+INV-1009,Harbor View Salon,410.00,2026-06-24,Cash
+INV-1011,Green Thumb Nursery,275.00,2026-06-27,Card
+INV-1012,Lakeside Books,200.00,2026-06-28,Card
+INV-1014,Miller Family Dentistry,960.00,2026-07-01,Check
+INV-1015,Crestview Daycare,540.00,2026-07-02,Card
+INV-1017,Hutchins Plumbing,1150.00,2026-07-03,Check
+INV-1018,Willow Grove Florist,225.00,2026-07-04,Cash
+INV-1200,Cornerstone Realty,500.00,2026-07-05,Check
