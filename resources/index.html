@@ -42,6 +42,11 @@
   .card .go{ display:inline-block; margin-top:14px; font-size:14px; font-weight:700; color:var(--blue); }
   .card .go:after{ content:" \2192"; }
 
+  .download-links{ display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+  .download-links a{ font-size:14px; font-weight:700; color:var(--blue); text-decoration:none; }
+  .download-links a:hover{ text-decoration:underline; }
+  .download-links a:after{ content:" \2193"; }
+
   .soon{ border-style:dashed; background:transparent; cursor:default; }
   .soon:hover{ transform:none; box-shadow:none; border-color:var(--line); }
   .soon .tag{ color:var(--muted); background:#EEF1F5; }
@@ -128,6 +133,17 @@
       <p>A one-page guide to what's safe to put into AI tools, and what to keep out.</p>
       <span class="go">Open the guide</span>
     </a>
+
+    <!-- Direct-download sample payment CSV files -->
+    <div class="card">
+      <span class="tag">Data</span>
+      <h2>Demo Payment Files</h2>
+      <p>Download the sample CSV files used in the payment examples.</p>
+      <div class="download-links">
+        <a href="demo-payments-received.csv" download>Download payments received</a>
+        <a href="demo-payments-sent.csv" download>Download payments sent</a>
+      </div>
+    </div>
 
     <!-- Placeholder. Turn it into a real card later, or delete it. -->
     <div class="card soon">
