@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI-Powered Classroom Simulations: Framework and Worksheet</title>
+<style>
+:root {
+  --ub-blue: #005BBB;
+  --harriman: #002F56;
+  --white: #FFFFFF;
+  --baird: #E4E4E4;
+  --solar: #FFC72C;
+  --gray: #666666;
+
+  --bg: var(--white);
+  --text: var(--harriman);
+  --muted: var(--gray);
+  --accent: var(--ub-blue);
+  --accent-text: var(--white);
+  --rule: var(--baird);
+  --field-border: var(--gray);
+  --field-bg: var(--white);
+  --panel: var(--baird);
+  --panel-text: var(--harriman);
+  --head-bg: var(--harriman);
+  --head-text: var(--white);
+  --gap-bg: var(--solar);
+  --gap-text: var(--harriman);
+  --focus: var(--ub-blue);
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--harriman);
+    --text: var(--white);
+    --muted: var(--baird);
+    --accent: var(--solar);
+    --accent-text: var(--harriman);
+    --rule: var(--ub-blue);
+    --field-border: var(--baird);
+    --field-bg: var(--harriman);
+    --panel: var(--white);
+    --panel-text: var(--harriman);
+    --head-bg: #000000;
+    --head-text: var(--white);
+    --focus: var(--solar);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: var(--harriman);
+  --text: var(--white);
+  --muted: var(--baird);
+  --accent: var(--solar);
+  --accent-text: var(--harriman);
+  --rule: var(--ub-blue);
+  --field-border: var(--baird);
+  --field-bg: var(--harriman);
+  --panel: var(--white);
+  --panel-text: var(--harriman);
+  --head-bg: #000000;
+  --head-text: var(--white);
+  --focus: var(--solar);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.55 Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; line-height: 1.2; }
+h2 { font-size: 1.75rem; margin: 2.2rem 0 .6rem; }
+h3 { font-size: 1.25rem; margin: 1.8rem 0 .5rem; }
+p { max-width: 70ch; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Header */
+.masthead { background: var(--head-bg); color: var(--head-text); padding: 2.5rem 1.25rem 2rem; }
+.masthead-inner { max-width: 1200px; margin: 0 auto; }
+.masthead h1 { font-size: clamp(2rem, 5vw, 3.4rem); margin: 0 0 .75rem; max-width: 24ch; letter-spacing: -.01em; }
+.masthead p { margin: 0; font-size: 1.05rem; }
+
+/* Tabs */
+.tabbar {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--head-bg);
+  border-bottom: 4px solid var(--solar);
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--head-bg); }
+.tabbar-inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: stretch; gap: .25rem; padding: 0 1.25rem; }
+.tab {
+  appearance: none; border: 0; background: transparent; color: var(--head-text);
+  font: inherit; font-weight: 700; padding: .85rem 1rem; cursor: pointer;
+  border-bottom: 4px solid transparent; margin-bottom: -4px;
+}
+.tab[aria-selected="true"] { background: var(--solar); color: var(--harriman); border-bottom-color: var(--solar); }
+.tab:hover:not([aria-selected="true"]) { text-decoration: underline; }
+.tabbar .spacer { flex: 1; }
+.export-toggle { align-self: center; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 1rem 1.25rem 4rem; }
+[role="tabpanel"][hidden] { display: none; }
+
+/* Buttons */
+.btn {
+  appearance: none; font: inherit; font-weight: 700; font-size: .95rem;
+  border: 2px solid var(--accent); background: var(--accent); color: var(--accent-text);
+  padding: .5rem .9rem; border-radius: 4px; cursor: pointer;
+}
+.btn.secondary { background: transparent; color: var(--accent); }
+.btn.small { padding: .3rem .6rem; font-size: .85rem; }
+.btn:hover { text-decoration: underline; }
+.btn-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+
+/* Export panel */
+.export-panel { border: 2px solid var(--accent); padding: 1rem 1.25rem; margin: 1rem 0 0; border-radius: 4px; }
+.export-panel[hidden] { display: none; }
+.export-panel h2 { margin: 0 0 .25rem; font-size: 1.3rem; }
+.export-panel p { margin: .25rem 0 .9rem; color: var(--muted); }
+.status { min-height: 1.5em; margin: .6rem 0 0; font-weight: 700; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: .75rem 0 1.25rem; }
+table { border-collapse: collapse; width: 100%; min-width: 520px; }
+th, td { text-align: left; vertical-align: top; padding: .6rem .75rem; border: 1px solid var(--field-border); }
+thead th { background: var(--head-bg); color: var(--head-text); font-weight: 700; }
+tbody th { font-weight: 700; width: 22%; }
+
+/* Framework layers */
+.layers { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: 0; border-top: 2px solid var(--text); }
+.layers li { display: grid; grid-template-columns: 3.5rem 1fr 1.4fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--field-border); }
+.layers .num { font: 700 2.4rem/1 Georgia, serif; color: var(--accent); }
+.layers strong { display: block; font-family: Georgia, serif; font-size: 1.15rem; }
+.layers .q { font-style: italic; }
+@media (max-width: 720px) { .layers li { grid-template-columns: 2.5rem 1fr; } .layers li > :last-child { grid-column: 2; } }
+
+.principles { margin: 1rem 0; padding: 0; list-style: none; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.principles li { background: var(--panel); color: var(--panel-text); padding: 1rem 1.1rem; border-left: 6px solid var(--ub-blue); }
+.principles strong { display: block; font-family: Georgia, serif; font-size: 1.1rem; margin-bottom: .3rem; }
+
+pre.prompt {
+  white-space: pre-wrap; word-wrap: break-word;
+  font: 15px/1.55 Consolas, "Courier New", monospace;
+  background: var(--panel); color: var(--panel-text);
+  padding: 1rem 1.1rem; margin: .5rem 0 1rem; border-radius: 4px; max-width: 80ch;
+}
+.callout { border-left: 6px solid var(--solar); padding: .5rem 1rem; margin: 1rem 0; }
+
+/* Builder */
+.builder { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+@media (max-width: 960px) { .builder { grid-template-columns: 1fr; } }
+.preview { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); max-height: calc(100vh - 90px); overflow: auto; border: 2px solid var(--text); border-radius: 4px; padding: 1rem; }
+@media (max-width: 960px) { .preview { position: static; max-height: none; } }
+.preview h2 { margin: 0 0 .5rem; font-size: 1.3rem; }
+.preview .seg { display: flex; gap: 0; margin-bottom: .75rem; }
+.preview .seg button { flex: 1; border-radius: 0; }
+.preview .seg button:first-child { border-radius: 4px 0 0 4px; }
+.preview .seg button:last-child { border-radius: 0 4px 4px 0; }
+.preview pre.prompt { max-width: none; }
+mark.gap { background: var(--gap-bg); color: var(--gap-text); padding: 0 .2em; border-radius: 2px; }
+
+.layer-block { border-top: 2px solid var(--text); padding-top: .25rem; margin-top: 2rem; }
+.layer-block:first-of-type { margin-top: 1rem; }
+.layer-head { display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+.layer-head h3 { margin: .9rem 0 .2rem; }
+.layer-head .count { font-size: .9rem; color: var(--muted); font-weight: 700; }
+.layer-head .count.done { color: var(--accent); }
+.hint { color: var(--muted); margin: 0 0 .75rem; font-size: .95rem; }
+
+.field { margin: 0 0 1rem; }
+.field label { display: block; font-weight: 700; margin-bottom: .25rem; }
+.field label span { font-weight: 400; color: var(--muted); }
+input[type="text"], textarea {
+  width: 100%; font: inherit; color: var(--text); background: var(--field-bg);
+  border: 2px solid var(--field-border); border-radius: 4px; padding: .5rem .65rem;
+}
+textarea { min-height: 3.2em; resize: vertical; line-height: 1.45; overflow: hidden; }
+input[type="text"]:focus, textarea:focus { border-color: var(--focus); outline: none; box-shadow: 0 0 0 2px var(--focus); }
+
+.goal-line { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .5rem .75rem; font-family: Georgia, serif; font-size: 1.15rem; }
+.goal-line span { text-align: right; }
+.goal-line input { font-family: Arial, sans-serif; font-size: 1rem; }
+
+.tier { border-left: 6px solid var(--ub-blue); padding: .25rem 0 .25rem 1rem; margin: 0 0 1.25rem; }
+.tier h4 { margin: 0 0 .5rem; font-family: Georgia, serif; font-size: 1.05rem; }
+.tier .pair { display: grid; grid-template-columns: 1.4fr 1fr; gap: .75rem; }
+@media (max-width: 600px) { .tier .pair { grid-template-columns: 1fr; } }
+
+.choice { display: flex; flex-wrap: wrap; gap: .5rem; border: 0; padding: 0; margin: 0 0 1rem; }
+.choice legend { font-weight: 700; margin-bottom: .35rem; padding: 0; }
+.choice label { display: inline-flex; align-items: center; gap: .4rem; border: 2px solid var(--field-border); border-radius: 4px; padding: .4rem .8rem; cursor: pointer; }
+.choice input { accent-color: var(--ub-blue); width: 1.1rem; height: 1.1rem; }
+
+.rubric-row { display: grid; grid-template-columns: 1fr 1.6fr auto; gap: .5rem; margin-bottom: .5rem; align-items: start; }
+@media (max-width: 600px) { .rubric-row { grid-template-columns: 1fr; } }
+
+/* Tests */
+.tests { list-style: none; padding: 0; margin: 1rem 0; border-top: 2px solid var(--text); }
+.tests li { padding: .9rem 0; border-bottom: 1px solid var(--field-border); display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; }
+.tests input[type="checkbox"] { width: 1.3rem; height: 1.3rem; margin-top: .2rem; accent-color: var(--ub-blue); }
+.tests .t-title { font-weight: 700; }
+.tests .t-meta { color: var(--muted); font-size: .95rem; }
+.tests .t-notes { grid-column: 2; }
+.tests .t-notes textarea { min-height: 2.4em; font-size: .95rem; }
+.fix-tag { display: inline-block; background: var(--panel); color: var(--panel-text); padding: 0 .4em; border-radius: 2px; font-weight: 700; font-size: .85rem; }
+
+.print-view { display: none; }
+
+@media print {
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .masthead, .tabbar, main, body::before { display: none !important; }
+  .print-view { display: block; padding: 0; }
+  .print-view h1 { font-size: 20pt; }
+  .print-view h2 { font-size: 15pt; break-after: avoid; }
+  .print-view table { min-width: 0; page-break-inside: avoid; }
+  .print-view th, .print-view td { border: 1px solid #000; }
+  .print-view thead th { background: #fff; color: #000; }
+  .print-view pre { white-space: pre-wrap; font-size: 9.5pt; border: 1px solid #000; padding: 8pt; background: #fff; color: #000; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1>AI-Powered Classroom Simulations</h1>
+    <p>A good AI simulation is designed, not just prompted. Start with one learning goal, build five layers, and your finished worksheet becomes the prompt you give the AI.</p>
+  </div>
+</header>
+
+<nav class="tabbar" aria-label="Sections">
+  <div class="tabbar-inner" role="tablist">
+    <button class="tab" role="tab" id="tab-framework" aria-controls="framework" aria-selected="true">Framework</button>
+    <button class="tab" role="tab" id="tab-example" aria-controls="example" aria-selected="false">Worked example</button>
+    <button class="tab" role="tab" id="tab-build" aria-controls="build" aria-selected="false">Your worksheet</button>
+    <button class="tab" role="tab" id="tab-test" aria-controls="test" aria-selected="false">Test it</button>
+    <span class="spacer"></span>
+    <button class="btn small export-toggle" id="exportToggle" aria-expanded="false" aria-controls="exportPanel">Export</button>
+  </div>
+</nav>
+
+<main>
+  <section class="export-panel" id="exportPanel" hidden aria-labelledby="exportHeading">
+    <h2 id="exportHeading">Export your worksheet</h2>
+    <p>Exports include your worksheet, both generated prompts, and your test notes. Save progress to keep working later; open that file to pick up where you left off.</p>
+    <div class="btn-row">
+      <button class="btn" data-export="docx">Download Word</button>
+      <button class="btn" data-export="md">Download Markdown</button>
+      <button class="btn" data-export="print">Print or save as PDF</button>
+      <button class="btn secondary" data-export="json">Save progress</button>
+      <button class="btn secondary" id="importBtn">Open saved progress</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+    <p class="status" id="exportStatus" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- FRAMEWORK -->
+  <section role="tabpanel" id="framework" aria-labelledby="tab-framework">
+    <h2>The framework</h2>
+    <p>Start with what students should be able to do, then build five layers. Each layer answers one design question, and each builds on the one before it.</p>
+    <ol class="layers">
+      <li><span class="num">0</span><div><strong>Learning goal</strong><span class="q">What should students be able to do afterward?</span></div><div>One observable skill: “Students will [skill] by [talking with whom] in [what situation].”</div></li>
+      <li><span class="num">1</span><div><strong>World</strong><span class="q">Where are they, and what is at stake?</span></div><div>Setting, the student’s role, the stakes, and the constraints (time, rules, realism).</div></li>
+      <li><span class="num">2</span><div><strong>Character</strong><span class="q">Who are they talking to?</span></div><div>Identity, motivation (what they want from this conversation), voice, and boundaries.</div></li>
+      <li><span class="num">3</span><div><strong>Knowledge</strong><span class="q">What does the character know, and when do they share it?</span></div><div>Four tiers: shares freely, shares if asked well, guards, doesn’t know. Each fact gets an unlock condition.</div></li>
+      <li><span class="num">4</span><div><strong>Modality</strong><span class="q">Will students type or talk?</span></div><div>Voice for real-time conversational skills, text for careful reasoning and clean transcripts, or both.</div></li>
+      <li><span class="num">5</span><div><strong>Evaluation and feedback</strong><span class="q">How will students know how they did?</span></div><div>How the character reacts in the moment, a separate AI coach with your rubric, and your own debrief.</div></li>
+    </ol>
+
+    <h3>Three core principles across the layers</h3>
+    <ul class="principles">
+      <li><strong>Give the character a want, not just a role.</strong>AI models default to being helpful and agreeable. Motivation creates the pushback that makes practice real.</li>
+      <li><strong>Knowledge gating is where the learning happens.</strong>If the character shares everything on the first question, there is nothing to practice.</li>
+      <li><strong>Separate the actor from the judge.</strong>The character stays in role. A different prompt grades the transcript.</li>
+    </ul>
+    <div class="btn-row" style="margin-top:1.5rem">
+      <button class="btn" data-goto="example">See the worked example</button>
+      <button class="btn secondary" data-goto="build">Start your worksheet</button>
+    </div>
+  </section>
+
+  <!-- EXAMPLE -->
+  <section role="tabpanel" id="example" aria-labelledby="tab-example" hidden>
+    <h2>Example: The Potluck Outbreak</h2>
+    <p>An interview simulation for an Intro to Epidemiology course. Students play a county health investigator questioning a diner owner after a foodborne illness outbreak.</p>
+    <div class="btn-row"><button class="btn secondary" id="loadExampleTop">Load this example into the worksheet</button></div>
+    <div id="exampleBody"></div>
+  </section>
+
+  <!-- BUILD -->
+  <section role="tabpanel" id="build" aria-labelledby="tab-build" hidden>
+    <h2>Your worksheet</h2>
+    <p>Fill in one layer at a time for a single case. The generated prompts update as you type. Your work saves in this browser automatically when the browser allows it; use Export to keep a copy.</p>
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn secondary small" id="loadExample">Fill with the Potluck example</button>
+      <button class="btn secondary small" id="clearAll">Clear worksheet</button>
+    </div>
+
+    <div class="builder">
+      <form id="ws" onsubmit="return false" novalidate>
+        <div class="field">
+          <label for="caseName">Case name</label>
+          <input type="text" id="caseName" data-path="caseName" placeholder="e.g. The Potluck Outbreak">
+        </div>
+
+        <div class="layer-block" data-layer="goal">
+          <div class="layer-head"><h3>0. Learning goal</h3><span class="count"></span></div>
+          <p class="hint">Quick check: would you recognize this skill if you saw it in a transcript?</p>
+          <div class="goal-line">
+            <span>Students will</span>
+            <input type="text" data-path="goal.skill" aria-label="Skill" placeholder="skill">
+            <span>by</span>
+            <input type="text" data-path="goal.who" aria-label="Talking with whom" placeholder="talking with whom">
+            <span>in</span>
+            <input type="text" data-path="goal.situation" aria-label="What situation" placeholder="what situation">
+          </div>
+        </div>
+
+        <div class="layer-block" data-layer="world">
+          <div class="layer-head"><h3>1. World</h3><span class="count"></span></div>
+          <p class="hint">Where are they, and what is at stake?</p>
+          <div class="field"><label>Setting <span>where and when, as specific as possible</span><textarea data-path="world.setting"></textarea></label></div>
+          <div class="field"><label>Student role <span>who they are, what authority they have</span><textarea data-path="world.role"></textarea></label></div>
+          <div class="field"><label>Stakes <span>why this conversation matters right now</span><textarea data-path="world.stakes"></textarea></label></div>
+          <div class="field"><label>Constraints <span>time limit, rules, what is realistic</span><textarea data-path="world.constraints"></textarea></label></div>
+        </div>
+
+        <div class="layer-block" data-layer="character">
+          <div class="layer-head"><h3>2. Character</h3><span class="count"></span></div>
+          <p class="hint">Give the character a want, not just a role.</p>
+          <div class="field"><label>Identity <span>name, background, role, history</span><textarea data-path="character.identity"></textarea></label></div>
+          <div class="field"><label>Motivation <span>what they want from this conversation</span><textarea data-path="character.motivation"></textarea></label></div>
+          <div class="field"><label>Voice <span>vocabulary, pace, emotional temperature, quirks</span><textarea data-path="character.voice"></textarea></label></div>
+          <div class="field"><label>Boundaries <span>what they never do or say</span><textarea data-path="character.boundaries"></textarea></label></div>
+        </div>
+
+        <div class="layer-block" data-layer="knowledge">
+          <div class="layer-head"><h3>3. Knowledge</h3><span class="count"></span></div>
+          <p class="hint">Knowledge gating is where the learning happens. Each fact gets an unlock condition.</p>
+          <div class="tier"><h4>Shares freely</h4><div class="pair">
+            <div class="field"><label>What the character knows<textarea data-path="knowledge.free.knows"></textarea></label></div>
+            <div class="field"><label>Unlock condition<textarea data-path="knowledge.free.unlock"></textarea></label></div>
+          </div></div>
+          <div class="tier"><h4>Shares if asked well</h4><div class="pair">
+            <div class="field"><label>What the character knows<textarea data-path="knowledge.asked.knows"></textarea></label></div>
+            <div class="field"><label>Unlock condition<textarea data-path="knowledge.asked.unlock" placeholder="e.g. a specific question about..."></textarea></label></div>
+          </div></div>
+          <div class="tier"><h4>Guards</h4><div class="pair">
+            <div class="field"><label>What the character knows<textarea data-path="knowledge.guards.knows"></textarea></label></div>
+            <div class="field"><label>Unlock condition<textarea data-path="knowledge.guards.unlock" placeholder="e.g. after the student builds trust"></textarea></label></div>
+          </div></div>
+          <div class="tier"><h4>Doesn’t know</h4><div class="pair">
+            <div class="field"><label>What the character doesn’t know<textarea data-path="knowledge.unknown.knows"></textarea></label></div>
+            <div class="field"><label>Unlock condition<textarea data-path="knowledge.unknown.unlock"></textarea></label></div>
+          </div></div>
+        </div>
+
+        <div class="layer-block" data-layer="modality">
+          <div class="layer-head"><h3>4. Modality</h3><span class="count"></span></div>
+          <p class="hint">Voice for real-time conversational skills, text for careful reasoning and clean transcripts, or both.</p>
+          <div class="field"><label>Does the real-world skill happen out loud and in real time?<textarea data-path="modality.aloud"></textarea></label></div>
+          <div class="field"><label>Do you need a clean written transcript for grading?<textarea data-path="modality.transcript"></textarea></label></div>
+          <div class="field"><label>Which students need the other mode?<textarea data-path="modality.other"></textarea></label></div>
+          <fieldset class="choice">
+            <legend>Choice</legend>
+            <label><input type="radio" name="modality" value="voice" data-path="modality.choice"> Voice</label>
+            <label><input type="radio" name="modality" value="text" data-path="modality.choice"> Text</label>
+            <label><input type="radio" name="modality" value="both" data-path="modality.choice"> Both</label>
+          </fieldset>
+        </div>
+
+        <div class="layer-block" data-layer="evaluation">
+          <div class="layer-head"><h3>5. Evaluation and feedback</h3><span class="count"></span></div>
+          <p class="hint">Separate the actor from the judge.</p>
+          <div class="field"><label>During <span>how the character reacts to strong and weak moves</span><textarea data-path="evaluation.during"></textarea></label></div>
+          <div class="field"><label>After <span>what the AI coach scores and how it reports back</span><textarea data-path="evaluation.after"></textarea></label></div>
+          <div class="field"><label>Later <span>how you will review and debrief</span><textarea data-path="evaluation.later"></textarea></label></div>
+          <h4 style="font-family:Georgia,serif;margin:1.25rem 0 .5rem">Rubric</h4>
+          <div id="rubric"></div>
+          <button type="button" class="btn secondary small" id="addCriterion">Add criterion</button>
+        </div>
+      </form>
+
+      <aside class="preview" aria-labelledby="previewHeading">
+        <h2 id="previewHeading">Generated prompts</h2>
+        <div class="seg" role="group" aria-label="Choose prompt">
+          <button type="button" class="btn small" id="showChar" aria-pressed="true">Character prompt</button>
+          <button type="button" class="btn small secondary" id="showCoach" aria-pressed="false">Coach prompt</button>
+        </div>
+        <p class="hint" id="previewHint">Highlighted text marks a layer you haven’t filled yet.</p>
+        <pre class="prompt" id="promptOut" aria-live="off"></pre>
+        <div class="btn-row">
+          <button type="button" class="btn small" id="copyPrompt">Copy character prompt</button>
+          <span class="status" id="copyStatus" role="status" aria-live="polite" style="margin:0"></span>
+        </div>
+        <p class="hint" style="margin-top:.75rem">Adapt the wording to whatever AI tool your institution supports.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- TEST -->
+  <section role="tabpanel" id="test" aria-labelledby="tab-test" hidden>
+    <h2>Test it (a lot) before students do</h2>
+    <p>Spend ten minutes trying to break your simulation. When a test fails, the layer named on the right is usually where to fix it. Check off each test and note what happened.</p>
+    <ul class="tests" id="tests"></ul>
+    <div class="callout">
+      <p><strong>Paper prototype first.</strong> Hand your worksheet to a colleague and ask them to play the character from it alone. Anything they have to guess or invent is a gap the AI will fill on its own.</p>
+    </div>
+    <p>Before deploying, check your institution’s guidance on approved AI tools and on student data in transcripts.</p>
+  </section>
+</main>
+
+<div class="print-view" id="printView" aria-hidden="true"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORE_KEY = "ai-sim-worksheet-v1";
+
+  var TESTS = [
+    { id: "outright", title: "Ask for the answer outright", check: "Does it hand over guarded facts?", fix: "Knowledge" },
+    { id: "rude", title: "Be rude or accusatory", check: "Does the character react like a real person?", fix: "Character" },
+    { id: "ai", title: "Ask “are you an AI?”", check: "Does it stay in role the way you planned?", fix: "Character" },
+    { id: "offscript", title: "Ask about something off script", check: "Does it invent facts it shouldn’t know?", fix: "Knowledge" },
+    { id: "perfect", title: "Play it perfectly", check: "Is it too easy for your strongest student?", fix: "Knowledge" },
+    { id: "poor", title: "Play it poorly", check: "Is it impossible for a struggling student?", fix: "World and Knowledge" },
+    { id: "coach", title: "Run the coach on a weak and a strong transcript", check: "Do the scores actually differ?", fix: "Evaluation" }
+  ];
+
+  function blank() {
+    return {
+      caseName: "",
+      goal: { skill: "", who: "", situation: "" },
+      world: { setting: "", role: "", stakes: "", constraints: "" },
+      character: { identity: "", motivation: "", voice: "", boundaries: "" },
+      knowledge: {
+        free: { knows: "", unlock: "Any reasonable question" },
+        asked: { knows: "", unlock: "" },
+        guards: { knows: "", unlock: "" },
+        unknown: { knows: "", unlock: "Never; says so honestly" }
+      },
+      modality: { aloud: "", transcript: "", other: "", choice: "" },
+      evaluation: { during: "", after: "", later: "" },
+      rubric: [{ criterion: "", strong: "" }, { criterion: "", strong: "" }, { criterion: "", strong: "" }, { criterion: "", strong: "" }],
+      tests: {}
+    };
+  }
+
+  var EXAMPLE = {
+    caseName: "The Potluck Outbreak",
+    goal: {
+      skill: "elicit a detailed food history and identify likely sources of contamination",
+      who: "interviewing a restaurant owner",
+      situation: "an outbreak investigation"
+    },
+    world: {
+      setting: "Rosa’s Kitchen, a family diner in a small town. Tuesday morning, before the lunch rush.",
+      role: "County public health investigator",
+      stakes: "Fourteen people fell ill after a church potluck the diner catered on Saturday. The county needs a likely source by end of day.",
+      constraints: "A 15-minute interview. The owner is cooperative but busy and worried about her business."
+    },
+    character: {
+      identity: "Dana Ruiz, 52, owner of Rosa’s Kitchen, which her mother opened in 1988. Knows every regular by name.",
+      motivation: "Protect the diner’s reputation and her staff, while genuinely not wanting anyone else to get sick",
+      voice: "Warm, talks fast when nervous, uses kitchen slang. Gets short if she feels accused.",
+      boundaries: "Never admits fault unprompted. Never names a pathogen or diagnoses the outbreak. Stays in character if asked whether she is an AI."
+    },
+    knowledge: {
+      free: { knows: "The potluck menu (chicken salad, rice and beans, flan), who cooked, and that food was delivered at 11 a.m. Saturday", unlock: "Any reasonable question" },
+      asked: { knows: "The walk-in cooler ran warm all weekend. The chicken salad was made Friday afternoon and held until Saturday.", unlock: "A specific question about storage, refrigeration, or prep timing" },
+      guards: { knows: "A line cook worked Friday’s prep shift while sick with vomiting", unlock: "The student is nonjudgmental and has built some trust, or asks directly about staff illness" },
+      unknown: { knows: "Lab results, the full list of who got sick, or what caused the outbreak", unlock: "Never. Dana says she doesn’t know rather than guessing." }
+    },
+    modality: {
+      aloud: "Yes. Real investigators interview in person and by phone, so thinking on your feet is part of the skill.",
+      transcript: "Yes. Text mode uses the same character, knowledge, and rubric so results stay comparable.",
+      other: "Text fallback for any student who can’t use voice.",
+      choice: "both"
+    },
+    evaluation: {
+      during: "Dana reacts in role. Accusations get short answers; rapport and good questions open up the guarded tiers.",
+      after: "A separate AI coach scores the transcript against the rubric. Coach output: one strength, one missed moment quoted from the transcript, and one question to try next time.",
+      later: "The instructor reviews transcripts, looks for class-wide patterns, and leads a debrief."
+    },
+    rubric: [
+      { criterion: "Rapport", strong: "Introduces self and purpose; stays nonjudgmental" },
+      { criterion: "Questioning", strong: "Open questions first, then targeted follow-ups on timing, temperature, and staff" },
+      { criterion: "Discovery", strong: "Uncovers both the cooler problem and the sick cook" },
+      { criterion: "Reasoning", strong: "States a source hypothesis backed by Dana’s answers" }
+    ],
+    tests: {}
+  };
+
+  var state = blank();
+
+  /* ---------- storage ---------- */
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (raw) state = merge(blank(), JSON.parse(raw));
+    } catch (e) { state = blank(); }
+  }
+  function merge(base, src) {
+    if (!src || typeof src !== "object") return base;
+    Object.keys(base).forEach(function (k) {
+      if (!(k in src)) return;
+      if (Array.isArray(base[k])) {
+        if (Array.isArray(src[k])) base[k] = src[k].map(function (r) { return { criterion: String(r.criterion || ""), strong: String(r.strong || "") }; });
+      } else if (base[k] && typeof base[k] === "object" && k !== "tests") {
+        base[k] = merge(base[k], src[k]);
+      } else if (k === "tests") {
+        base.tests = (src.tests && typeof src.tests === "object") ? src.tests : {};
+      } else {
+        base[k] = String(src[k] == null ? "" : src[k]);
+      }
+    });
+    return base;
+  }
+
+  function getPath(p) { return p.split(".").reduce(function (o, k) { return o ? o[k] : ""; }, state); }
+  function setPath(p, v) {
+    var ks = p.split("."), o = state;
+    for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]];
+    o[ks[ks.length - 1]] = v;
+  }
+
+  /* ---------- helpers ---------- */
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function t(s) { return (s || "").trim(); }
+  function stripEnd(s) { return t(s).replace(/[.\s]+$/, ""); }
+  function sentence(s) { s = t(s); if (!s) return s; return /[.!?”"]$/.test(s) ? s : s + "."; }
+  function lowerFirst(s) { s = t(s); return s ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
+  function charName() {
+    var id = t(state.character.identity);
+    if (!id) return "";
+    return id.split(/[,.;(]/)[0].trim();
+  }
+
+  /* Prompt pieces are arrays of [text, isGap]. */
+  function G(label) { return ["[" + label + "]", true]; }
+  function T(s) { return [s, false]; }
+  function V(s, label) { return t(s) ? T(t(s)) : G(label); }
+  function VS(s, label) { return t(s) ? T(sentence(s)) : G(label); }
+
+  function goalPieces() {
+    return [T("Students will "), V(state.goal.skill, "skill"), T(" by "), V(state.goal.who, "talking with whom"), T(" in "), V(stripEnd(state.goal.situation), "what situation"), T(".")];
+  }
+
+  function characterPrompt() {
+    var w = state.world, c = state.character, k = state.knowledge, m = state.modality, e = state.evaluation;
+    var name = charName();
+    var P = [];
+    P.push(T("# Scenario\nYou are part of a training simulation.\nSetting: "), VS(w.setting, "setting"));
+    P.push(T("\nThe student is "), t(w.role) ? T(lowerFirstIfArticle(w.role)) : G("student role"), T(", talking with you."));
+    P.push(T("\nWhat is at stake: "), VS(w.stakes, "stakes"));
+    P.push(T("\nConstraints: "), VS(w.constraints, "constraints"));
+
+    P.push(T("\n\n# Who you are\nYou are "), t(c.identity) ? T(sentence(c.identity)) : G("identity"));
+    P.push(T("\nWhat you want from this conversation: "), VS(c.motivation, "motivation"));
+    P.push(T("\nHow you come across: "), VS(c.voice, "voice"));
+
+    P.push(T("\n\n# What you know, and when you share it"));
+    P.push(T("\nShare freely: "), VS(k.free.knows, "shares freely"));
+    if (t(k.free.unlock) && !/^any reasonable question\.?$/i.test(t(k.free.unlock))) P.push(T(" Share this when: " + sentence(k.free.unlock)));
+    P.push(T("\nShare if asked well: "), VS(k.asked.knows, "shares if asked well"), T("\n  Unlock condition: "), VS(k.asked.unlock, "unlock condition"));
+    P.push(T("\nGuard: "), VS(k.guards.knows, "guarded facts"), T("\n  Unlock condition: "), VS(k.guards.unlock, "unlock condition"));
+    P.push(T("\nYou do not know: "), VS(k.unknown.knows, "doesn’t know"), T(" If asked, say you don’t know. Never invent details."));
+
+    P.push(T("\n\n# How you speak\n"));
+    if (m.choice === "voice") P.push(T("This is a spoken conversation. Keep replies to two or three sentences, then wait for the next question. Use natural, conversational language."));
+    else if (m.choice === "text") P.push(T("This is a typed conversation. Keep replies short and conversational, then wait for the next question."));
+    else if (m.choice === "both") P.push(T("This conversation may be spoken or typed. Either way, keep replies to two or three sentences, then wait for the next question. Use natural, conversational language."));
+    else P.push(G("modality: voice, text, or both"));
+
+    P.push(T("\n\n# How you react\n"), VS(e.during, "how the character reacts to strong and weak moves"));
+
+    P.push(T("\n\n# Rules\nStay in character" + (name ? " as " + name : "") + " for the entire conversation.\nBoundaries: "), VS(c.boundaries, "boundaries"));
+    P.push(T("\nNever coach the student or suggest what to ask next."));
+    return P;
+  }
+
+  function lowerFirstIfArticle(s) {
+    s = t(s);
+    var low = lowerFirst(s);
+    return /^(a|an|the)\s/i.test(s) ? low : "a " + low;
+  }
+
+  function coachPrompt() {
+    var w = state.world, k = state.knowledge, e = state.evaluation;
+    var name = charName();
+    var P = [];
+    P.push(T("You are a coach reviewing a transcript from a training simulation. The student played "));
+    P.push(t(w.role) ? T(lowerFirstIfArticle(stripEnd(w.role))) : G("student role"));
+    P.push(T(" talking with "), name ? T(name) : G("character"), T("."));
+    P.push(T("\nLearning goal: ")); P = P.concat(goalPieces());
+    P.push(T("\n\nHidden facts the student could uncover:\n1. "), VS(k.asked.knows, "shares if asked well"));
+    P.push(T("\n2. "), VS(k.guards.knows, "guarded facts"));
+
+    P.push(T("\n\nScore the transcript on each criterion from 1 (not shown) to 4 (strong):"));
+    var rows = state.rubric.filter(function (r) { return t(r.criterion) || t(r.strong); });
+    if (!rows.length) P.push(T("\n- "), G("rubric criteria"));
+    rows.forEach(function (r) {
+      P.push(T("\n- "), V(r.criterion, "criterion"), T(": "), VS(r.strong, "what strong looks like"));
+    });
+
+    P.push(T("\n\nInstructor notes on scoring and reporting: "));
+    if (t(e.after)) P.push(T(sentence(e.after)));
+    else P.push(G("what the coach scores and how it reports back"));
+    P.push(T("\nThen give the student:\n- One specific strength.\n- One missed opportunity, quoting the exact moment from the transcript.\n- One question to try next time.\nKeep feedback under 150 words, direct and encouraging."));
+    return P;
+  }
+
+  function piecesToHTML(P) { return P.map(function (p) { return p[1] ? '<mark class="gap">' + esc(p[0]) + "</mark>" : esc(p[0]); }).join(""); }
+  function piecesToText(P) { return P.map(function (p) { return p[0]; }).join(""); }
+
+  /* ---------- rendering ---------- */
+  var promptMode = "char";
+  var outEl = document.getElementById("promptOut");
+  function renderPreview() {
+    outEl.innerHTML = piecesToHTML(promptMode === "char" ? characterPrompt() : coachPrompt());
+  }
+
+  var LAYERS = {
+    goal: ["goal.skill", "goal.who", "goal.situation"],
+    world: ["world.setting", "world.role", "world.stakes", "world.constraints"],
+    character: ["character.identity", "character.motivation", "character.voice", "character.boundaries"],
+    knowledge: ["knowledge.free.knows", "knowledge.asked.knows", "knowledge.asked.unlock", "knowledge.guards.knows", "knowledge.guards.unlock", "knowledge.unknown.knows"],
+    modality: ["modality.aloud", "modality.transcript", "modality.other", "modality.choice"]
+  };
+  function renderCounts() {
+    document.querySelectorAll(".layer-block").forEach(function (b) {
+      var key = b.getAttribute("data-layer"), n, total;
+      if (key === "evaluation") {
+        var paths = ["evaluation.during", "evaluation.after", "evaluation.later"];
+        total = paths.length + 1;
+        n = paths.filter(function (p) { return t(getPath(p)); }).length + (state.rubric.some(function (r) { return t(r.criterion) && t(r.strong); }) ? 1 : 0);
+      } else {
+        var ps = LAYERS[key]; total = ps.length;
+        n = ps.filter(function (p) { return t(getPath(p)); }).length;
+      }
+      var el = b.querySelector(".count");
+      el.textContent = n === total ? "Complete" : n + " of " + total + " filled";
+      el.classList.toggle("done", n === total);
+    });
+  }
+
+  function autosize(ta) { ta.style.height = "auto"; ta.style.height = (ta.scrollHeight + 4) + "px"; }
+
+  function fillForm() {
+    document.querySelectorAll("[data-path]").forEach(function (el) {
+      var v = getPath(el.getAttribute("data-path")) || "";
+      if (el.type === "radio") el.checked = el.value === v;
+      else el.value = v;
+      if (el.tagName === "TEXTAREA") autosize(el);
+    });
+    renderRubric();
+    renderTests();
+    refresh();
+  }
+
+  function refresh() { renderPreview(); renderCounts(); save(); }
+
+  document.getElementById("ws").addEventListener("input", function (ev) {
+    var el = ev.target;
+    if (el.hasAttribute("data-path")) {
+      setPath(el.getAttribute("data-path"), el.value);
+      if (el.tagName === "TEXTAREA") autosize(el);
+      refresh();
+    } else if (el.hasAttribute("data-r")) {
+      state.rubric[+el.getAttribute("data-i")][el.getAttribute("data-r")] = el.value;
+      autosize(el);
+      refresh();
+    }
+  });
+  document.getElementById("ws").addEventListener("change", function (ev) {
+    var el = ev.target;
+    if (el.type === "radio" && el.hasAttribute("data-path")) { setPath(el.getAttribute("data-path"), el.value); refresh(); }
+  });
+
+  /* rubric */
+  var rubricEl = document.getElementById("rubric");
+  function renderRubric() {
+    rubricEl.innerHTML = state.rubric.map(function (r, i) {
+      return '<div class="rubric-row">' +
+        '<textarea data-r="criterion" data-i="' + i + '" aria-label="Criterion ' + (i + 1) + '" placeholder="Criterion">' + esc(r.criterion) + "</textarea>" +
+        '<textarea data-r="strong" data-i="' + i + '" aria-label="What strong looks like for criterion ' + (i + 1) + '" placeholder="What strong looks like">' + esc(r.strong) + "</textarea>" +
+        '<button type="button" class="btn secondary small" data-remove="' + i + '" aria-label="Remove criterion ' + (i + 1) + '">Remove</button>' +
+        "</div>";
+    }).join("");
+    rubricEl.querySelectorAll("textarea").forEach(autosize);
+  }
+  rubricEl.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-remove]");
+    if (!b) return;
+    state.rubric.splice(+b.getAttribute("data-remove"), 1);
+    renderRubric(); refresh();
+  });
+  document.getElementById("addCriterion").addEventListener("click", function () {
+    state.rubric.push({ criterion: "", strong: "" });
+    renderRubric(); refresh();
+    var tas = rubricEl.querySelectorAll('textarea[data-r="criterion"]');
+    tas[tas.length - 1].focus();
+  });
+
+  /* tests */
+  var testsEl = document.getElementById("tests");
+  function renderTests() {
+    testsEl.innerHTML = TESTS.map(function (x) {
+      var s = state.tests[x.id] || {};
+      return "<li>" +
+        '<input type="checkbox" id="t-' + x.id + '" data-test="' + x.id + '"' + (s.done ? " checked" : "") + ">" +
+        '<label for="t-' + x.id + '"><span class="t-title">' + esc(x.title) + '</span><br><span class="t-meta">' + esc(x.check) + ' If it fails, revisit <span class="fix-tag">' + esc(x.fix) + "</span></span></label>" +
+        '<div class="t-notes"><textarea data-test-notes="' + x.id + '" aria-label="Notes for: ' + esc(x.title) + '" placeholder="What happened?">' + esc(s.notes || "") + "</textarea></div>" +
+        "</li>";
+    }).join("");
+    testsEl.querySelectorAll("textarea").forEach(autosize);
+  }
+  testsEl.addEventListener("input", function (ev) {
+    var el = ev.target;
+    var id = el.getAttribute("data-test") || el.getAttribute("data-test-notes");
+    if (!id) return;
+    state.tests[id] = state.tests[id] || {};
+    if (el.type === "checkbox") state.tests[id].done = el.checked;
+    else { state.tests[id].notes = el.value; autosize(el); }
+    save();
+  });
+  testsEl.addEventListener("change", function (ev) {
+    var el = ev.target;
+    if (el.type === "checkbox") { state.tests[el.getAttribute("data-test")] = state.tests[el.getAttribute("data-test")] || {}; state.tests[el.getAttribute("data-test")].done = el.checked; save(); }
+  });
+
+  /* preview toggle + copy */
+  var showChar = document.getElementById("showChar"), showCoach = document.getElementById("showCoach"), copyBtn = document.getElementById("copyPrompt");
+  function setMode(m) {
+    promptMode = m;
+    showChar.setAttribute("aria-pressed", m === "char"); showCoach.setAttribute("aria-pressed", m === "coach");
+    showChar.classList.toggle("secondary", m !== "char"); showCoach.classList.toggle("secondary", m !== "coach");
+    copyBtn.textContent = m === "char" ? "Copy character prompt" : "Copy coach prompt";
+    renderPreview();
+  }
+  showChar.addEventListener("click", function () { setMode("char"); });
+  showCoach.addEventListener("click", function () { setMode("coach"); });
+
+  function copyText(text, statusEl, okMsg) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      statusEl.textContent = ok ? okMsg : "Copy didn’t work here. Select the prompt text and copy it manually.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { statusEl.textContent = okMsg; }, fallback);
+    } else fallback();
+    setTimeout(function () { statusEl.textContent = ""; }, 3000);
+  }
+  copyBtn.addEventListener("click", function () {
+    var text = piecesToText(promptMode === "char" ? characterPrompt() : coachPrompt());
+    copyText(text, document.getElementById("copyStatus"), "Copied");
+  });
+
+  /* load example / clear */
+  function loadExample() {
+    var hasWork = JSON.stringify(state) !== JSON.stringify(blank());
+    if (hasWork && !confirm("Replace your current worksheet with the Potluck example?")) return;
+    state = merge(blank(), JSON.parse(JSON.stringify(EXAMPLE)));
+    fillForm();
+    selectTab("build");
+  }
+  document.getElementById("loadExample").addEventListener("click", loadExample);
+  document.getElementById("loadExampleTop").addEventListener("click", loadExample);
+  document.getElementById("clearAll").addEventListener("click", function () {
+    if (!confirm("Clear every field in the worksheet and your test notes?")) return;
+    state = blank(); fillForm();
+  });
+
+  /* ---------- tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function selectTab(id, focus) {
+    tabs.forEach(function (tb) {
+      var on = tb.getAttribute("aria-controls") === id;
+      tb.setAttribute("aria-selected", on);
+      tb.tabIndex = on ? 0 : -1;
+      document.getElementById(tb.getAttribute("aria-controls")).hidden = !on;
+      if (on && focus) tb.focus();
+    });
+    if (location.hash !== "#" + id) { try { history.replaceState(null, "", "#" + id); } catch (e) {} }
+    window.scrollTo(0, 0);
+    if (id === "build") document.querySelectorAll("#build textarea").forEach(autosize);
+  }
+  tabs.forEach(function (tb, i) {
+    tb.addEventListener("click", function () { selectTab(tb.getAttribute("aria-controls")); });
+    tb.addEventListener("keydown", function (ev) {
+      var d = ev.key === "ArrowRight" ? 1 : ev.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      ev.preventDefault();
+      selectTab(tabs[(i + d + tabs.length) % tabs.length].getAttribute("aria-controls"), true);
+    });
+  });
+  document.querySelectorAll("[data-goto]").forEach(function (b) {
+    b.addEventListener("click", function () { selectTab(b.getAttribute("data-goto")); });
+  });
+
+  /* ---------- worked example content ---------- */
+  function table(head, rows) {
+    return '<div class="table-wrap"><table><thead><tr>' + head.map(function (h) { return "<th scope=\"col\">" + esc(h) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      rows.map(function (r) { return "<tr>" + r.map(function (c, i) { return i === 0 ? '<th scope="row">' + esc(c) + "</th>" : "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") +
+      "</tbody></table></div>";
+  }
+  (function renderExample() {
+    var X = EXAMPLE;
+    var exState = state; state = merge(blank(), JSON.parse(JSON.stringify(EXAMPLE)));
+    var charP = piecesToText(characterPrompt()), coachP = piecesToText(coachPrompt());
+    state = exState;
+    var h = "";
+    h += "<h3>0. Learning goal</h3><p>Students will " + esc(X.goal.skill) + " by " + esc(X.goal.who) + " during " + esc(X.goal.situation) + ".</p>";
+    h += "<h3>1. World</h3>" + table(["Element", "Example"], [["Setting", X.world.setting], ["Student role", X.world.role], ["Stakes", X.world.stakes], ["Constraints", X.world.constraints]]);
+    h += "<h3>2. Character</h3>" + table(["Element", "Example"], [["Identity", X.character.identity], ["Motivation", X.character.motivation], ["Voice", X.character.voice], ["Boundaries", X.character.boundaries]]);
+    h += "<h3>3. Knowledge</h3>" + table(["Tier", "What Dana knows", "Unlock condition"], [
+      ["Shares freely", X.knowledge.free.knows, X.knowledge.free.unlock],
+      ["Shares if asked well", X.knowledge.asked.knows, X.knowledge.asked.unlock],
+      ["Guards", X.knowledge.guards.knows, X.knowledge.guards.unlock],
+      ["Doesn’t know", X.knowledge.unknown.knows, X.knowledge.unknown.unlock]]);
+    h += "<p>Two plausible sources are hidden on purpose, so strong students must find both and weigh them.</p>";
+    h += "<h3>4. Modality</h3><p>Voice first, with a text fallback. Real investigators interview in person and by phone, so thinking on your feet is part of the skill. Text mode uses the same character, knowledge, and rubric so results stay comparable. In voice, Dana answers in two or three sentences, then waits.</p>";
+    h += "<h3>5. Evaluation and feedback</h3><p><strong>During:</strong> Dana reacts in role. Accusations get short answers; rapport and good questions open up the guarded tiers.<br><strong>After:</strong> A separate AI coach scores the transcript against the rubric below.<br><strong>Later:</strong> The instructor reviews transcripts, looks for class-wide patterns, and leads a debrief.</p>";
+    h += table(["Criterion", "What strong looks like"], X.rubric.map(function (r) { return [r.criterion, r.strong]; }));
+    h += "<p>Coach output: one strength, one missed moment quoted from the transcript, and one question to try next time.</p>";
+    h += "<h2>From worksheet to prompt</h2><p>Each worksheet layer becomes a labeled section of the character prompt. The feedback layer becomes a second, separate prompt for the coach. These are generated from the example exactly the way your worksheet will be.</p>";
+    h += '<h3>Character prompt</h3><pre class="prompt">' + esc(charP) + "</pre>";
+    h += '<h3>Coach prompt</h3><pre class="prompt">' + esc(coachP) + "</pre>";
+    document.getElementById("exampleBody").innerHTML = h;
+  })();
+
+  /* ---------- export ---------- */
+  function fileBase() {
+    var n = t(state.caseName) || "simulation-worksheet";
+    return n.replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").toLowerCase() || "simulation-worksheet";
+  }
+  function dash(s) { return t(s) || "(not filled in)"; }
+  function goalText() { return piecesToText(goalPieces()); }
+  function modalityLabel() { return { voice: "Voice", text: "Text", both: "Both voice and text" }[state.modality.choice] || ""; }
+
+  function sectionsData() {
+    var s = state, k = s.knowledge;
+    return [
+      { title: "0. Learning goal", para: goalText() },
+      { title: "1. World", head: ["Element", "Your simulation"], rows: [["Setting", s.world.setting], ["Student role", s.world.role], ["Stakes", s.world.stakes], ["Constraints", s.world.constraints]] },
+      { title: "2. Character", head: ["Element", "Your simulation"], rows: [["Identity", s.character.identity], ["Motivation", s.character.motivation], ["Voice", s.character.voice], ["Boundaries", s.character.boundaries]] },
+      { title: "3. Knowledge", head: ["Tier", "What the character knows", "Unlock condition"], rows: [
+        ["Shares freely", k.free.knows, k.free.unlock], ["Shares if asked well", k.asked.knows, k.asked.unlock],
+        ["Guards", k.guards.knows, k.guards.unlock], ["Doesn’t know", k.unknown.knows, k.unknown.unlock]] },
+      { title: "4. Modality", head: ["Question", "Your answer"], rows: [
+        ["Does the real-world skill happen out loud and in real time?", s.modality.aloud],
+        ["Do you need a clean written transcript for grading?", s.modality.transcript],
+        ["Which students need the other mode?", s.modality.other],
+        ["Choice: voice, text, or both", modalityLabel()]] },
+      { title: "5. Evaluation and feedback", head: ["Moment", "How it works in your simulation"], rows: [
+        ["During", s.evaluation.during], ["After", s.evaluation.after], ["Later", s.evaluation.later]],
+        extra: { head: ["Rubric criterion", "What strong looks like"], rows: s.rubric.filter(function (r) { return t(r.criterion) || t(r.strong); }).map(function (r) { return [r.criterion, r.strong]; }) } }
+    ];
+  }
+
+  function testsRows() {
+    return TESTS.map(function (x) {
+      var st = state.tests[x.id] || {};
+      return [(st.done ? "[x] " : "[ ] ") + x.title, x.check, x.fix, t(st.notes)];
+    });
+  }
+
+  function buildDocHTML() {
+    var title = t(state.caseName) || "Untitled case";
+    var css = "body{font-family:Arial,sans-serif;font-size:11pt;color:#002F56}h1,h2{font-family:Georgia,serif;color:#002F56}h1{font-size:22pt}h2{font-size:15pt;margin-top:18pt}" +
+      "table{border-collapse:collapse;width:100%;margin:6pt 0 12pt}th,td{border:1px solid #666666;padding:5pt;text-align:left;vertical-align:top}thead th{background:#002F56;color:#FFFFFF}" +
+      "pre{white-space:pre-wrap;font-family:Consolas,'Courier New',monospace;font-size:9.5pt;border:1px solid #666666;padding:8pt}";
+    function tbl(head, rows) {
+      return "<table><thead><tr>" + head.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        rows.map(function (r) { return "<tr>" + r.map(function (c, i) { return (i === 0 ? "<td><b>" : "<td>") + esc(c || "") + (i === 0 ? "</b></td>" : "</td>"); }).join("") + "</tr>"; }).join("") + "</tbody></table>";
+    }
+    var body = "<h1>AI-Powered Classroom Simulation: " + esc(title) + "</h1>";
+    sectionsData().forEach(function (sec) {
+      body += "<h2>" + esc(sec.title) + "</h2>";
+      if (sec.para) body += "<p>" + esc(sec.para) + "</p>";
+      if (sec.rows) body += tbl(sec.head, sec.rows);
+      if (sec.extra && sec.extra.rows.length) body += tbl(sec.extra.head, sec.extra.rows);
+    });
+    body += "<h2>Character prompt</h2><pre>" + esc(piecesToText(characterPrompt())) + "</pre>";
+    body += "<h2>Coach prompt</h2><pre>" + esc(piecesToText(coachPrompt())) + "</pre>";
+    body += "<h2>Test log</h2>" + tbl(["Test", "What you are checking", "If it fails, revisit", "Notes"], testsRows());
+    return { title: title, css: css, body: body };
+  }
+
+  function mdCell(s) { return t(s).replace(/\|/g, "\\|").replace(/\n+/g, "<br>") || " "; }
+  function mdTable(head, rows) {
+    return "| " + head.join(" | ") + " |\n| " + head.map(function () { return "---"; }).join(" | ") + " |\n" +
+      rows.map(function (r) { return "| " + r.map(mdCell).join(" | ") + " |"; }).join("\n") + "\n";
+  }
+  function buildMarkdown() {
+    var out = "# AI-Powered Classroom Simulation: " + (t(state.caseName) || "Untitled case") + "\n\n";
+    sectionsData().forEach(function (sec) {
+      out += "## " + sec.title + "\n\n";
+      if (sec.para) out += sec.para + "\n\n";
+      if (sec.rows) out += mdTable(sec.head, sec.rows) + "\n";
+      if (sec.extra && sec.extra.rows.length) out += mdTable(sec.extra.head, sec.extra.rows) + "\n";
+    });
+    out += "## Character prompt\n\n```\n" + piecesToText(characterPrompt()) + "\n```\n\n";
+    out += "## Coach prompt\n\n```\n" + piecesToText(coachPrompt()) + "\n```\n\n";
+    out += "## Test log\n\n" + mdTable(["Test", "What you are checking", "If it fails, revisit", "Notes"], testsRows());
+    return out;
+  }
+
+  /* Minimal .docx writer (stored ZIP, no compression) */
+  var CRC_TABLE = (function () { var c, tb = []; for (var n = 0; n < 256; n++) { c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; tb[n] = c >>> 0; } return tb; })();
+  function crc32(bytes) { var c = 0xFFFFFFFF; for (var i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function zip(files) {
+    var enc = new TextEncoder(), parts = [], central = [], offset = 0;
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), data = enc.encode(f.data), crc = crc32(data);
+      var lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+      lh.setUint16(10, 0, true); lh.setUint16(12, 0x21, true); lh.setUint32(14, crc, true);
+      lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+      parts.push(new Uint8Array(lh.buffer), name, data);
+      var ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+      ch.setUint16(12, 0, true); ch.setUint16(14, 0x21, true); ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true);
+      ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+      central.push(new Uint8Array(ch.buffer), name);
+      offset += 30 + name.length + data.length;
+    });
+    var csize = central.reduce(function (a, b) { return a + b.length; }, 0);
+    var end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, csize, true); end.setUint32(16, offset, true);
+    return new Blob(parts.concat(central, [new Uint8Array(end.buffer)]), { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+  }
+  function x(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function wRuns(text, opts) {
+    opts = opts || {};
+    var rpr = "<w:rPr>" + (opts.font ? '<w:rFonts w:ascii="' + opts.font + '" w:hAnsi="' + opts.font + '"/>' : "") + (opts.bold ? "<w:b/>" : "") + (opts.color ? '<w:color w:val="' + opts.color + '"/>' : "") + (opts.size ? '<w:sz w:val="' + opts.size + '"/>' : "") + "</w:rPr>";
+    return String(text).split("\n").map(function (line, i) { return "<w:r>" + rpr + (i ? "<w:br/>" : "") + '<w:t xml:space="preserve">' + x(line) + "</w:t></w:r>"; }).join("");
+  }
+  function wP(text, style, opts) { return "<w:p>" + (style ? '<w:pPr><w:pStyle w:val="' + style + '"/></w:pPr>' : "") + wRuns(text, opts) + "</w:p>"; }
+  function wTable(head, rows) {
+    var cols = head.length, w = Math.floor(9360 / cols);
+    var b = '<w:tblBorders><w:top w:val="single" w:sz="4" w:color="666666"/><w:left w:val="single" w:sz="4" w:color="666666"/><w:bottom w:val="single" w:sz="4" w:color="666666"/><w:right w:val="single" w:sz="4" w:color="666666"/><w:insideH w:val="single" w:sz="4" w:color="666666"/><w:insideV w:val="single" w:sz="4" w:color="666666"/></w:tblBorders>';
+    var out = '<w:tbl><w:tblPr><w:tblW w:w="9360" w:type="dxa"/>' + b + '<w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>';
+    for (var i = 0; i < cols; i++) out += '<w:gridCol w:w="' + w + '"/>';
+    out += "</w:tblGrid>";
+    function cell(text, isHead, isFirst) {
+      return '<w:tc><w:tcPr><w:tcW w:w="' + w + '" w:type="dxa"/>' + (isHead ? '<w:shd w:val="clear" w:color="auto" w:fill="002F56"/>' : "") + "</w:tcPr><w:p>" +
+        wRuns(text || "", { bold: isHead || isFirst, color: isHead ? "FFFFFF" : null }) + "</w:p></w:tc>";
+    }
+    out += '<w:tr><w:trPr><w:tblHeader/></w:trPr>' + head.map(function (h) { return cell(h, true); }).join("") + "</w:tr>";
+    rows.forEach(function (r) { out += "<w:tr>" + r.map(function (c, i) { return cell(c, false, i === 0); }).join("") + "</w:tr>"; });
+    return out + "</w:tbl>" + wP("");
+  }
+  function buildDocx() {
+    var body = wP("AI-Powered Classroom Simulation: " + (t(state.caseName) || "Untitled case"), "Title");
+    sectionsData().forEach(function (sec) {
+      body += wP(sec.title, "Heading1");
+      if (sec.para) body += wP(sec.para);
+      if (sec.rows) body += wTable(sec.head, sec.rows);
+      if (sec.extra && sec.extra.rows.length) body += wTable(sec.extra.head, sec.extra.rows);
+    });
+    body += wP("Character prompt", "Heading1") + wP(piecesToText(characterPrompt()), "Code");
+    body += wP("Coach prompt", "Heading1") + wP(piecesToText(coachPrompt()), "Code");
+    body += wP("Test log", "Heading1") + wTable(["Test", "What you are checking", "If it fails, revisit", "Notes"], testsRows());
+    var doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + body +
+      '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/></w:sectPr></w:body></w:document>';
+    var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:color w:val="002F56"/><w:sz w:val="22"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>' +
+      '<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="240"/></w:pPr><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:b/><w:sz w:val="44"/></w:rPr></w:style>' +
+      '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:spacing w:before="360" w:after="120"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:b/><w:color w:val="005BBB"/><w:sz w:val="30"/></w:rPr></w:style>' +
+      '<w:style w:type="paragraph" w:styleId="Code"><w:name w:val="Code"/><w:basedOn w:val="Normal"/><w:pPr><w:pBdr><w:top w:val="single" w:sz="4" w:space="6" w:color="666666"/><w:left w:val="single" w:sz="4" w:space="6" w:color="666666"/><w:bottom w:val="single" w:sz="4" w:space="6" w:color="666666"/><w:right w:val="single" w:sz="4" w:space="6" w:color="666666"/></w:pBdr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="19"/></w:rPr></w:style>' +
+      "</w:styles>";
+    return zip([
+      { name: "[Content_Types].xml", data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>' },
+      { name: "_rels/.rels", data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>' },
+      { name: "word/_rels/document.xml.rels", data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
+      { name: "word/document.xml", data: doc },
+      { name: "word/styles.xml", data: styles }
+    ]);
+  }
+
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+  }
+
+  var statusEl = document.getElementById("exportStatus");
+  function status(msg) { statusEl.textContent = msg; setTimeout(function () { if (statusEl.textContent === msg) statusEl.textContent = ""; }, 5000); }
+
+  document.querySelectorAll("[data-export]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var kind = b.getAttribute("data-export"), base = fileBase();
+      try {
+        if (kind === "docx") { download(buildDocx(), base + ".docx"); status("Downloaded " + base + ".docx"); }
+        else if (kind === "md") { download(new Blob([buildMarkdown()], { type: "text/markdown;charset=utf-8" }), base + ".md"); status("Downloaded " + base + ".md"); }
+        else if (kind === "json") { download(new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }), base + "-progress.json"); status("Saved " + base + "-progress.json. Open it here later to keep working."); }
+        else if (kind === "print") {
+          var d = buildDocHTML();
+          document.getElementById("printView").innerHTML = d.body;
+          window.print();
+        }
+      } catch (e) { status("Export didn’t finish: " + e.message); }
+    });
+  });
+
+  var importFile = document.getElementById("importFile");
+  document.getElementById("importBtn").addEventListener("click", function () { importFile.click(); });
+  importFile.addEventListener("change", function () {
+    var f = importFile.files && importFile.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        state = merge(blank(), JSON.parse(r.result));
+        fillForm(); selectTab("build");
+        status("Opened " + f.name);
+      } catch (e) { status("That file isn’t a saved worksheet. Choose a .json file from Save progress."); }
+      importFile.value = "";
+    };
+    r.readAsText(f);
+  });
+
+  var exportToggle = document.getElementById("exportToggle"), exportPanel = document.getElementById("exportPanel");
+  exportToggle.addEventListener("click", function () {
+    var open = exportPanel.hidden;
+    exportPanel.hidden = !open;
+    exportToggle.setAttribute("aria-expanded", open);
+    if (open) { window.scrollTo(0, 0); exportPanel.querySelector("button").focus(); }
+  });
+
+  window.addEventListener("beforeprint", function () {
+    var pv = document.getElementById("printView");
+    if (!pv.innerHTML) pv.innerHTML = buildDocHTML().body;
+  });
+  window.addEventListener("afterprint", function () { document.getElementById("printView").innerHTML = ""; });
+
+  /* ---------- init ---------- */
+  load();
+  fillForm();
+  var start = (location.hash || "").replace("#", "");
+  selectTab(["framework", "example", "build", "test"].indexOf(start) > -1 ? start : "framework");
+  window.addEventListener("hashchange", function () {
+    var h = location.hash.replace("#", "");
+    if (["framework", "example", "build", "test"].indexOf(h) > -1) selectTab(h);
+  });
+})();
+</script>
+</body>
+</html>
